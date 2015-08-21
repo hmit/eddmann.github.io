@@ -1,0 +1,18 @@
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           /posts/:title/
+relative_permalinks: true
+
+# Setup
+paginate:          5
+paginate_path:     "/page/:num/"
+excerpt_separator: "<!--more-->"
+url:               "http://eddmann.com"
+
+# Assets
+#
+# We specify the directory for Jekyll so we can use @imports.
+sass:
+  sass_dir: _sass
+  style:    :compressed

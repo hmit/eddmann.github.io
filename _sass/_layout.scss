@@ -14,14 +14,34 @@ footer {
   margin-bottom: 2rem;
 
   img {
+    width: 4rem;
+    height: 4rem;
     float: left;
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      float: none;
+      display: block;
+      margin: 1rem auto;
+    }
   }
 
   ul {
     padding: 0;
     margin: 0 0 0 1rem;
-    list-style: none;;
+    list-style: none;
     float: left;
     font-size: 0.9rem;
+
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+      text-align: center;
+      float: none;
+      display: block;
+      margin: 0;
+    }
   }
 }

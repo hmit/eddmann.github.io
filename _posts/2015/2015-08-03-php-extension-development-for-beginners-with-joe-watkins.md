@@ -11,4 +11,4 @@ We then compile a basic CLI version of PHP for development purposes, verifying t
 Finally, we wrap up the show by creating a simple 'array_sum' PHP extension clone using the provided 'ext_skel'.
 This example highlights the use of macros and common array based actions that take place in a typical extension.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/5FoHyfu8meM" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/5FoHyfu8meM" frameborder="0" allowfullscreen></iframe>

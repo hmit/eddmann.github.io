@@ -55,10 +55,10 @@ In the case of a match not being found the supplied number is returned instead.
 
 {% highlight clojure %}
 (defn fizzbuzz [n]
-  (let [match? (some-fn #(when (fizzbuzz? %) "FizzBuzz")
-                        #(when (fizz? %) "Fizz")
-                        #(when (buzz? %) "Buzz"))]
-    (or (match? n) n)))
+  (let [to-words (some-fn #(when (fizzbuzz? %) "FizzBuzz")
+                          #(when (fizz? %) "Fizz")
+                          #(when (buzz? %) "Buzz"))]
+    (or (to-words n) n)))
 {% endhighlight %}
 
 ## Solution 4
@@ -71,8 +71,7 @@ If the predicate passes, the entry is kept and finally joined together to return
 (defn fizzbuzz
   ([n] (fizzbuzz n (array-map fizz? "Fizz" buzz? "Buzz")))
   ([n lookup]
-   (let [matches (keep (fn [[pred? word]] (when (pred? n) word)) lookup)]
-     (if (empty? matches)
-       n
-       (apply str matches)))))
+    (if-let [matches (seq (keep (fn [[pred? word]] (when (pred? n) word)) lookup))]
+      (apply str matches)
+      n)))
 {% endhighlight %}

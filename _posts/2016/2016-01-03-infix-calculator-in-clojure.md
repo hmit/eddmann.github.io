@@ -40,11 +40,11 @@ The implementation below follows a similar pattern to a previous one I documente
           (let [less-op? #(and (contains? ops %) (<= (ops token) (ops %)))
                 not-open-paren? #(not= "(" %)]
             (cond
-              (= token "(") [rpn (conj stack token)]
-              (= token ")") [(concat rpn (take-while not-open-paren? stack)) (rest (drop-while not-open-paren? stack))]
-              (contains? ops token) [(concat rpn (take-while less-op? stack)) (conj (drop-while less-op? stack) token)]
-              :else [(conj (vec rpn) token) stack])))
-        [[] []]
+              (= token "(") [rpn (cons token stack)]
+              (= token ")") [(vec (concat rpn (take-while not-open-paren? stack))) (rest (drop-while not-open-paren? stack))]
+              (contains? ops token) [(vec (concat rpn (take-while less-op? stack))) (cons token (drop-while less-op? stack))]
+              :else [(conj rpn token) stack])))
+        [[] ()]
         tokens))))
 {% endhighlight %}
 

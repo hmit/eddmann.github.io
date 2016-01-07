@@ -1,0 +1,82 @@
+---
+layout: post
+title: "Recursive Functions using a Trampoline in Clojure"
+meta: "Using the concept of a Trampoline to maintain a single call stack frame in Clojure"
+---
+
+Following on from yesterdays post that discussed ['Trampolining' in JavaScript](/posts/recursive-functions-using-a-trampoline-in-javascript/), I thought it would be interesting to see what Clojure has to offer.
+<!--more-->
+
+## Odd and Even
+
+Using a mutually recursive algorithm such as the odd/even value checker below shows that we are still faced with stack-overflow issues when supplying a sufficiently sized input.
+
+{% highlight clojure %}
+(declare is-even?)
+
+(defn is-odd? [n]
+  (if (zero? n)
+    false
+    (is-even? (dec n))))
+
+(defn is-even? [n]
+  (if (zero? n)
+    true
+    (is-odd? (dec n))))
+
+(is-odd? 10000)
+; Caused by: java.lang.StackOverflowError: null
+{% endhighlight %}
+
+However, with a little function wrapper addition and the use of the 'trampoline' we are able to return back to a single call stack-frame being used, as opposed to the O(n) memory complexity faced at this time.
+
+{% highlight clojure %}
+(declare is-even?)
+
+(defn is-odd? [n]
+  (if (zero? n)
+    false
+    #(is-even? (dec n))))
+
+(defn is-even? [n]
+  (if (zero? n)
+    true
+    #(is-odd? (dec n))))
+
+(trampoline (is-odd? 10000))
+{% endhighlight %}
+
+Thanks to the anonymous function shorthand macro and core 'trampoline' function there is not a lot of boilerplate that is required to make this algorithm more efficient.
+
+## Factorial
+
+We can also take advantage of the trampoline when faced with self-recursive tail-position calls in an environment which does not implicitly optimise for such a case.
+
+{% highlight clojure %}
+(defn factorial
+  ([n] (factorial n 1))
+  ([n acc] (if (< n 2) acc (factorial (dec n) (*' n acc)))))
+
+(factorial 10000)
+; Caused by: java.lang.StackOverflowError: null
+{% endhighlight %}
+
+It should be noted that with such a large input value you may face an integer overflow exception before any stack-overflow occurs, to accommodate for this the use of a BigInt (using the *' function) has been incorporated.
+
+{% highlight clojure %}
+(defn factorial
+  ([n] #(factorial n 1))
+  ([n acc] (if (< n 2) acc #(factorial (dec n) (*' n acc)))))
+
+(trampoline (factorial 10000))
+{% endhighlight %}
+
+Clojure does not provide implicit tail-call optimisation like other languages hosted on the JVM (Scala).
+However, you are able to assist the compiler in explicitly specifying such a need with the use of the 'recur' function.
+The implementation below is very similar to the original, differing only in its use of 'recur' over the explicit function name in the tail-call positioned recursive call.
+
+{% highlight clojure %}
+(defn factorial
+  ([n] (factorial n 1))
+  ([n acc] (if (< n 2) acc (recur (dec n) (*' n acc)))))
+{% endhighlight %}

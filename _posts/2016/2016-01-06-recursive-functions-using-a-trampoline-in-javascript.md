@@ -35,7 +35,7 @@ const trampoline = (fn) => {
 {% endhighlight %}
 
 The above implementation does not handle the use-case that the desired returned value is a function itself.
-This can be easily addressed however with a more advanced implementation, of which I will write about in a future article.
+This can be easily addressed however with a more advanced implementation, of which I will write about in a [future article](/posts/even-higher-trampolining-in-javascript/).
 
 {% highlight js %}
 const odd = (n) => () => n === 0 ? false : even(n - 1);

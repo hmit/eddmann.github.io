@@ -30,8 +30,12 @@ pre code {
 
 // Pygments via Jekyll
 .highlight {
+  margin: 0 0 1rem 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
   padding: 1rem;
-  margin-bottom: 1rem;
   font-size: .8rem;
   line-height: 1.4;
   background-color: #f9f9f9;

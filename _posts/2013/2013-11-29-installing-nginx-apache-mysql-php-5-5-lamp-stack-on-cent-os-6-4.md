@@ -117,7 +117,7 @@ $ mkdir /usr/lib/cgi-bin/
 We can then create a new file '/etc/httpd/conf.d/default.conf' with the contents below to get up-and-running.
 This configuration is very trivial, I would recommend that you take a look at the great work [here](http://github.com/h5bp/server-configs-apache) for more ideas.
 
-{% highlight apache %}
+{% highlight conf %}
 # /etc/httpd/conf.d/default.conf
 
 # FastCGI

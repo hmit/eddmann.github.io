@@ -44,7 +44,7 @@ $ yum install mod_ssl
 
 With the prerequisites out of the way we are now able to direct access through port 443 (HTTPS) to use the generated certificate.
 
-{% highlight apache %}
+{% highlight conf %}
 <VirtualHost *:443>
 
     SSLEngine On
@@ -58,7 +58,7 @@ With the prerequisites out of the way we are now able to direct access through p
 
 Optional, we can also force all traffic sent and received be over HTTPS by redirecting HTTP requests to use the secure connection.
 
-{% highlight apache %}
+{% highlight conf %}
 <VirtualHost *:80>
 
    Redirect permanent / https://www.example.com/

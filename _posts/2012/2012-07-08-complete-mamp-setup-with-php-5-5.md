@@ -78,7 +78,7 @@ Finally we can then add 127.0.0.1 as the first DNS record.
 The last step is to setup the last development Apache Virtual Host you will hopefully ever have to look at.
 Add the following Virtual Host information into your custom Apache configuration file, located at '/etc/apache2/users/[your-username].conf'.
 
-{% highlight apache %}
+{% highlight conf %}
 NameVirtualHost *:80
 
 <Directory "/Users/[your-username]/Sites/">

@@ -4,11 +4,11 @@ title: "Implementing the Shunting Yard algorithm in JavaScript"
 meta: "Parsing an infix expression into its RPN counterpart using the Shunting Yard algorithm in JavaScript"
 ---
 
-Following on from my [recent post]({% post_url 2015/2015-08-25-small-rpn-implementation-in-javascript %}) on implementing a small RPN parser using JavaScript, we can expand on this by handling infix expressions.
+Following on from my [recent post]({% post_url 2015-08-25-small-rpn-implementation-in-javascript %}) on implementing a small RPN parser using JavaScript, we can expand on this by handling infix expressions.
 This can be achieved by initially parsing the expression into its postfix (RPN) counterpart, highlighting another use case where a stack based approach works well.
 <!--more-->
 Looping over each token we either push the token to the output if it is numeric, pop from the operator stack based on precedence if an operator or handle brackets accordingly.
-You can find a more in-depth description of the algorithm using Java as the example language in a [previous post]({% post_url 2013/2013-12-23-shunting-yard-implementation-in-java %}).
+You can find a more in-depth description of the algorithm using Java as the example language in a [previous post]({% post_url 2013-12-23-shunting-yard-implementation-in-java %}).
 
 {% highlight js %}
 let yard = (infix) => {

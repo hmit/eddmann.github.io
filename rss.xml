@@ -6,7 +6,7 @@ layout: null
 <rss version="2.0">
     <channel>
         <title>Edd Mann</title>
-        <link>http://eddmann.com/</link>
+        <link>{{ site.url }}</link>
         <description>I make stuff for the web, and occasionally ramble about it here.</description>
         <lastBuildDate>{{ site.time | date_to_xmlschema }}</lastBuildDate>
         {% for post in site.posts %}

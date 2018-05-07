@@ -3,7 +3,7 @@ permalink: /posts/:title/
 paginate:          5
 paginate_path:     "/page/:num/"
 excerpt_separator: "<!--more-->"
-url:               "http://eddmann.com"
+url:               "https://eddmann.com"
 
 sass:
   sass_dir: _sass

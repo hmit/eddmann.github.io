@@ -8,7 +8,7 @@ Over the Christmas break I found myself on a bit of a nostalgic gaming journey.
 Along with building a [RetroPie](https://retropie.org.uk/), I dusted off my old Game Boy and decided to 'catch them all' one more time on Pokémon Red.
 Whilst playing, the developer in me started to contrive how a game like this was created, and better still could be changed.
 Enter [pokered](https://github.com/pret/pokered), a disassembly of Pokémon Red/Blue which has been organised so that an assembly code noice like myself can understand it.
-In this post I will go through compiling the ASM, tweaking the game to add 'Super B' button behaviour, and then running the compiled ROM on an actual handheld!
+In this post I will go through compiling the ASM, tweaking the game to add ['Super B' button behaviour](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de), and then running the compiled ROM on an actual handheld!
 <!--more-->
 
 **Note:** I don't condone piracy and personally own both Pokémon Red/Blue game cartridges that this project is based on.
@@ -48,7 +48,7 @@ I started to review the code-base to see if there was a way of taking advantage 
 #### Prevent Wild Pokémon Encounters
 
 It turns out that the game had an unused [debug mode](https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Debug_Functions#Debug_Mode) that was left in, which provided one part of this behaviour.
-As such I was able to tweak [`engine/battle/core.asm`](https://github.com/pret/pokered/blob/master/engine/battle/core.asm#L6848) to prevent wild Pokémon encounters if the B button was pressed.
+As such I was able to tweak [`engine/battle/core.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-126f3527215b40b1dc53ffe1ff45b479) to prevent wild Pokémon encounters if the B button was pressed.
 
 {% highlight nasm %}
 DetermineWildOpponent:
@@ -66,7 +66,7 @@ This tweak simply removes the check for if the debug mode is enabled and short-c
 #### Prevent Trainer Battle Encounters
 
 Following this, I now hoped to follow a similar pattern in temporarily preventing trainer battle encounters.
-I was able to achieve this by making some minor modifications to [`home.asm`](https://github.com/pret/pokered/blob/master/home.asm#L2326).
+I was able to achieve this by making some minor modifications to [`home.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-33f8ea117b558305b57c03b757e4ef64).
 
 {% highlight nasm %}
 CheckFightingMapTrainers::
@@ -91,7 +91,7 @@ Once compiled, I was able to experiment with these two changes and found them to
 #### Walking Through Walls
 
 I then thought wouldn't it be cool to accommodate for a similar 'walk through walls' glitch behaviour that you see in certain [speed runs](https://www.youtube.com/watch?v=5naL4X1vUbE).
-As such I delved back into the code-base and made a small modification to [`home/overworld.asm`](https://github.com/pret/pokered/blob/master/home/overworld.asm#L236) which provided me with this capability.
+As such I delved back into the code-base and made a small modification to [`home/overworld.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-3dcdb47cbd60e627ff3c82d83193112c) which provided me with this capability.
 
 {% highlight nasm %}
 .noDirectionChange

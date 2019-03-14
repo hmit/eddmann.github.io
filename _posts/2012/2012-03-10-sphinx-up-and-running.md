@@ -33,26 +33,26 @@ This hinderance can be dampened by using SphinxSE.
 
 If you are liking the sound of Sphinx and want to give it a go, below I have provided a step-by-step guide to setting up a working installation along with SphinxSE support on a Ubuntu 11.10 server.
 
-{% highlight bash %}
+```bash
 $ wget http://sphinxsearch.com/files/sphinx-2.0.4-release.tar.gz
 $ tar -zxf sphinx-2.0.4-release.tar.gz
 $ cd sphinx-2.0.4-release/
 $ ./configure --prefix=/usr/local/sphinx
 $ sudo make install
-{% endhighlight %}
+```
 
 You may be required to install the following dependencies to succesfully compile Sphinx.
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install build-essential libmysql++-dev
-{% endhighlight %}
+```
 
 ## Setup
 
 Once you have successfully compiled and installed Sphinx you now need to configure the installation.
 For this demo we will use the test data/configuration provided with the distrubition.
 
-{% highlight bash %}
+```bash
 $ cd /usr/local/sphinx/etc/
 $ sudo cp sphinx.conf.dist sphinx.conf
 $ vim sphinx.conf # alter the username, password and db
@@ -60,7 +60,7 @@ $ mysql -u root -p test < /usr/local/sphinx/etc/example.sql
 $ sudo indexer --all
 $ search test # returns a few record matches
 $ sudo searchd # begins the search daemon
-{% endhighlight %}
+```
 
 ## SphinxSE
 
@@ -69,7 +69,7 @@ There are two avenues that can be taken to acheive this, the first is compiling 
 Alternatively we can compile the Sphinx engine with the MySQL server version we have and then copy the required files to the current MySQL server setup.
 I will be doing the later in this article.
 
-{% highlight bash %}
+```bash
 $ wget http://downloads.mysql.com/archives/mysql-5.1/mysql-5.1.58.tar.gz
 $ tar -zxf mysql-5.1.58.tar.gz
 $ cp -R sphinx-2.0.4-release/mysqlse/mysql-5.1.58/storage/sphinx
@@ -81,19 +81,19 @@ $ make
 $ cp storage/sphinx/.libs/ha_sphinx.* /usr/lib/mysql/plugin/
 $ mysql -u root -p
 $ mysql> INSTALL PLUGIN sphinx SONAME 'ha_sphinx.so';
-{% endhighlight %}
+```
 
 You may be required to install the following dependencies to successfully compile MySQL with the Sphinx engine.
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install autotools-dev automake libtool ncurses-dev
-{% endhighlight %}
+```
 
 ## Usage
 
 Now that you have successfully compiled and installed Sphinx and SphinxSE all that is required is to create a special table to interface with the search daemon.
 
-{% highlight sql %}
+```sql
 /* create the special table */
 CREATE TABLE t1
 (
@@ -106,7 +106,7 @@ CREATE TABLE t1
 
 /* sample query that uses searchd */
 SELECT * FROM t1 WHERE query='test;mode=any';
-{% endhighlight %}
+```
 
 ## Resources
 

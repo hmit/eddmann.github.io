@@ -20,7 +20,7 @@ For me though, I do not need all bells n' whistles that these provide, my base r
 So as a result of these requirements I created the two simple functions below.
 I am sure there are many similar implementations available online, but these two are serving me well.
 
-{% highlight php startinline %}
+```php
 function dump()
 {
   $args = func_get_args();
@@ -52,7 +52,7 @@ function dump_d()
   call_user_func_array('dump', func_get_args());
   die();
 }
-{% endhighlight %}
+```
 
 ## Resources
 

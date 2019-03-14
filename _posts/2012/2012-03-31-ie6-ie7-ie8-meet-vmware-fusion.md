@@ -31,9 +31,9 @@ The easiest way I have researched into performing this task is to install [Q](ht
 
 Once you have installed Q, open up your Terminal and navigate to the folder which holds the VHD, once in there run the command below:
 
-{% highlight bash %}
+```bash
 $ /Applications/Q.app/Contents/MacOS/qemu-img convert -O vmdk -f vpc Windows XP.vhd Windows XP.vmdk
-{% endhighlight %}
+```
 
 ## Installation
 

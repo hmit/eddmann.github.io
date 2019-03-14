@@ -13,9 +13,7 @@ I thought it would be interesting to go over the code I used to achieve this.
 
 The first job we need to do is to parse each of the podcasts front-matter into a format that we can processed in PHP.
 
-{% highlight php %}
-<?php
-
+```php
 $podcasts = array_reduce(scandir(POSTS_DIR), function ($meta, $fileName) {
     if (strpos($fileName, '.') === 0) {
         return $meta;
@@ -27,15 +25,13 @@ $podcasts = array_reduce(scandir(POSTS_DIR), function ($meta, $fileName) {
 
     return array_merge($meta, [array_combine($match[1], $match[2])]);
 }, []);
-{% endhighlight %}
+```
 
 ### Stats, stats, stats
 
 With the podcast meta-data now in a format with can process, we can now go about generating some stats. 
  
-{% highlight php %}
-<?php
-
+```php
 // Total size
 array_sum(array_column($podcasts, 'size'));
 
@@ -44,11 +40,9 @@ array_sum(array_column($podcasts, 'duration'));
 
 // Average duration
 round(array_sum(array_column($podcasts, 'duration')) / count($podcasts));
-{% endhighlight %}
+```
 
-{% highlight php %}
-<?php
-
+```php
 // Release day rankings
 $days = array_count_values(
     array_map(
@@ -64,11 +58,9 @@ $months = array_count_values(
         $podcasts));
 arsort($months);
 implode(', ', array_map(function ($month, $total) { return "$month ($total)"; }, array_keys($months), $months));
-{% endhighlight %}
+```
 
-{% highlight php %}
-<?php
-
+```php
 // Most frequent title words
 $words = array_count_values(
     array_reduce($podcasts, function ($words, $m) {
@@ -77,4 +69,4 @@ $words = array_count_values(
     }, []));
 arsort($words);
 implode(', ', array_keys(array_slice($words, 0, 10)));
-{% endhighlight %}
+```

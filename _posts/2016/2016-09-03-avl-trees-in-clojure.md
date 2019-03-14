@@ -17,7 +17,7 @@ Using the previous Binary Search Tree implementation as a base, we are able to e
 For the sake of performance you would typically store the height of each nodes children within the structure, however, as I wish to re-use the existing implementation I will instead calculate their height upon `factor` invocation.
 The balance factor per. node is calculated by the difference between the two child node's heights, as shown below.
 
-{% highlight clojure %}
+```clojure
 (defn height
   ([tree] (height tree 0))
   ([tree count]
@@ -28,7 +28,7 @@ The balance factor per. node is calculated by the difference between the two chi
 
 (defn factor [{:keys [left right]}]
   (- (height left) (height right)))
-{% endhighlight %}
+```
 
 The above two functions provide us with the described behavior, allowing us to supply a root node and return it's balance factor.
 
@@ -36,7 +36,7 @@ The above two functions provide us with the described behavior, allowing us to s
 
 So as to complete the final re-balancing step we must also be able to rotate a given node both left and right within the tree structure.
 
-{% highlight clojure %}
+```clojure
 (defn rotate-left [{:keys [el left right] :as tree}]
   (if right
     (->Node (:el right) (->Node el left (:left right)) (:right right))
@@ -46,7 +46,7 @@ So as to complete the final re-balancing step we must also be able to rotate a g
   (if left
     (->Node (:el left) (:left left) (->Node el (:right left) right))
     tree))
-{% endhighlight %}
+```
 
 This can be achieved as shown above, taking advantage of an immutable approach.
 
@@ -56,27 +56,27 @@ With the balance factor and rotation actions now available, we are able to begin
 
 ![Left Right, Left Left Cases](/uploads/avl-trees-in-clojure/lr-ll-cases.png)
 
-{% highlight clojure %}
+```clojure
 (defn is-left-case? [tree]
   (< (factor tree) -1))
 
 (defn is-left-right-case? [tree]
   (and (is-left-case? tree) (> (factor (:right tree)) 0)))
-{% endhighlight %}
+```
 
 ![Right Left, Right Right Cases](/uploads/avl-trees-in-clojure/rl-rr-cases.png)
 
-{% highlight clojure %}
+```clojure
 (defn is-right-case? [tree]
   (> (factor tree) 1))
 
 (defn is-right-left-case? [tree]
   (and (is-right-case? tree) (< (factor (:left tree)) 0)))
-{% endhighlight %}
+```
 
 With these conditions now locatable, we can apply the desired tree rotations which can be seen visualised in the diagrams above.
 
-{% highlight clojure %}
+```clojure
 (defn balance [{:keys [el left right] :as tree}]
   (cond
     (is-right-left-case? tree) (rotate-right (->Node el (rotate-left left) right))
@@ -84,21 +84,21 @@ With these conditions now locatable, we can apply the desired tree rotations whi
     (is-right-case? tree) (rotate-right tree)
     (is-left-case? tree) (rotate-left tree)
     :else tree))
-{% endhighlight %}
+```
 
 ### Example Usage
 
 Finally, we are able to create a new AVL insertion/deletion variant, that is a composition of the Binary Search Tree functions and the newly created `balance` one.
 
-{% highlight clojure %}
+```clojure
 (def avl-insert (comp balance insert))
 (def avl-remove (comp balance remove))
 (def seq->avl (partial reduce avl-insert nil))
-{% endhighlight %}
+```
 
 These created data-structures can then be visualised using the following function.
 
-{% highlight clojure %}
+```clojure
 (defn tabs [n]
   (clojure.string/join(repeat n "\t")))
 
@@ -117,4 +117,4 @@ These created data-structures can then be visualised using the following functio
 ;              ~
 ;       1
 ;              ~
-{% endhighlight %}
+```

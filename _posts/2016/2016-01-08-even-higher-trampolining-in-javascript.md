@@ -11,23 +11,23 @@ Taking an idea found in the Clojure documentation for this said function, I deci
 This allows us to pass along the additional knowledge of whether the users desired action is to continue ('cont') or complete ('done') back to the trampoline, so we can make the correct decision.
 This approach also has the added bonus of being more expressive in its intent, thanks to these additional functions being used.
 
-{% highlight js %}
+```js
 const trampoline = (bounce) => {
   let [isRunning, value] = bounce;
-  
+
   while (isRunning) {
     [isRunning, value] = value();
   }
-  
+
   return value;
 };
 trampoline.cont = (thunk) => [ true, thunk ];
 trampoline.done = (result) => [ false, result ];
-{% endhighlight %}
+```
 
-{% highlight js %}
+```js
 const odd = (n) => (n == 0) ? trampoline.done(false) : trampoline.cont(() => even(n - 1));
 const even = (n) => (n == 0) ? trampoline.done(true) : trampoline.cont(() => odd(n - 1));
 
 trampoline(odd(4));
-{% endhighlight %}
+```

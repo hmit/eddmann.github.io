@@ -9,7 +9,7 @@ This sorting technique can be completed in-place, however, using Clojure we will
 Each element is iteratively inserted into a 'new' collection which maintains a sorted invariant as shown in the implementation documented below.
 <!--more-->
 
-{% highlight clojure %}
+```clojure
 (defn insertion-sort [xs]
   (letfn [(insert [col x]
             (loop [[y & ys] col acc []]
@@ -20,7 +20,7 @@ Each element is iteratively inserted into a 'new' collection which maintains a s
     (reduce insert [] xs)))
 
 (insertion-sort [3 2 1]) ; [1 2 3]
-{% endhighlight %}
+```
 
 The `reduce` provides us with the infrastructure required around accumulating and iterating over each element within the provided collection.
 The use of a private helper function gives us the ability to correctly insert the target element within the resulting collection.

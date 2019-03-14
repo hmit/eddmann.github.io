@@ -10,12 +10,12 @@ I created this tool a while back in Python and thought it would be interesting t
 
 The implementations below uses the following Node dependencies.
 
-{% highlight js %}
+```js
 import fetch from 'node-fetch';
 import {AllHtmlEntities} from 'html-entities';
 const entities = new AllHtmlEntities();
 import {copy, paste} from 'copy-paste';
-{% endhighlight %}
+```
 
 ## Fetching Clipboard Links
 
@@ -23,21 +23,21 @@ I made a conscious effort to try and break up the problem as much as I could, so
 The first problem to solve was fetching the links from the clipboard and then parsing this input into an array.
 You will notice that I am wrapping the callback-based `paste` asynchronous approach with a Promise so I can interact with it in the same way as the rest of the application functions.
 
-{% highlight js %}
+```js
 const fromClipboard = () =>
   new Promise((res, _) => paste((_, x) => res(x)));
 
 const toLinks = (s) => s.split('\n').map(s => s.trim());
 
 const fetchClipboardLinks = () => fromClipboard().then(toLinks);
-{% endhighlight %}
+```
 
 ## Fetching and Extracting Link Titles
 
 Now that we have the desired input we can fetch and extract the titles for each of the links.
 Notice how I have created functions which handle an individual link transformation, and then used a `Promise.all` invocation to handle the array provided.
 
-{% highlight js %}
+```js
 const extractTitle = (r) => r.ok
   ? r.text().then(t => t.match(/<title[^>]*>([^<]+)<\/title>/)[1])
   : '';
@@ -49,13 +49,13 @@ const fetchTitleForLink = (l) =>
 
 const fetchTitlesForLinks = (ls) =>
   Promise.all(ls.map(fetchTitleForLink));
-{% endhighlight %}
+```
 
 ## Copying the Markdown List to the Clipboard
 
 Finally, we need to 'zip' up the links and their associated titles and then transform this list into Markdown, which is subsequently copied to the clipboard.
 
-{% highlight js %}
+```js
 const zip = (x) => (y) => x.map((ele, idx) => [ele, y[idx]]);
 
 const toMarkdownList = (arr) =>
@@ -63,26 +63,26 @@ const toMarkdownList = (arr) =>
 
 const toClipboard = (x) =>
   new Promise((res, _) => copy(x, () => res(x)));
-{% endhighlight %}
+```
 
 ## Putting it Together
 
 The functions we have created are very small, and as a result very descriptive/composable in their nature.
 Below is a basic Promise based approach to stitching the functions together to solve the problem laid out.
 
-{% highlight js %}
+```js
 fetchClipboardLinks()
   .then(ls => fetchTitlesForLinks(ls).then(zip(ls)))
   .then(toMarkdownList)
   .then(toClipboard)
   .then(console.log)
   .catch(console.error);
-{% endhighlight %}
+```
 
 We are also able to take advantage of a proposed ES2016 feature which will add async/await capabilites to JavaScript.
 You will notice that the solution below follows a more sequential flow, allowing you to clearly see how each asynchronous part is built up and combined to produce the result.
 
-{% highlight js %}
+```js
 (async function linksToMarkdownList() {
   const links = await fetchClipboardLinks();
   const titles = await fetchTitlesForLinks(links);
@@ -90,4 +90,4 @@ You will notice that the solution below follows a more sequential flow, allowing
   await toClipboard(list);
   console.log(list);
 })();
-{% endhighlight %}
+```

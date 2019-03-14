@@ -14,7 +14,7 @@ Again, there are many good external [resources](http://sean.voisen.org/blog/2013
 The Maybe type encapsulates the concept of Some (contains a value) and None (no value present).
 With these two abstractions we are able to safety handle the event of no value being present, without NullPointerException's being thrown and null checks.
 
-{% highlight js %}
+```js
 const Maybe = (function () {
   const Some = function (x) { this.x = x; };
   Some.prototype.fmap = function (fn) { return Maybe.of(fn(this.x)); };
@@ -33,7 +33,7 @@ const Maybe = (function () {
     None
   };
 })();
-{% endhighlight %}
+```
 
 The implementation above uses two small prototypical class definitions to define Some and None.
 We then return the ability to take a value of a plain type and put it into a Maybe container, along with the capability to lift a function into the Maybe space.
@@ -44,21 +44,21 @@ The first example of using the Maybe type I will demonstrate is in the case of h
 In the event that the denominator is zero instead of throwing an exception or returning null (as shown in the basic `div` implementation) we will instead lift the function into the Maybe type and return a Some or None.
 This may not seem like much of a win at this time but when we later look at examples of composing these expressions together you will be shown its full power.
 
-{% highlight js %}
+```js
 const div = (a, b) => b === 0 ? null : a / b;
 const mdiv = Maybe.lift(div);
 
 div(10, 0); // null
 mdiv(100, 0); // None
 mdiv(10, 2); // Some(5)
-{% endhighlight %}
+```
 
 ### Property Retrieval Example
 
 Another case were `undefined` values may appear in JavaScript is whilst retrieving properties from objects that may(not) be present.
 Again, we are able to highlight how the basic `get` function returns the object property or undefined if not present, were as lifting it into the Maybe type provides us with the Some and None abstractions.
 
-{% highlight js %}
+```js
 const get = curry((prop, obj) => obj[prop]);
 const mget = (prop) => Maybe.lift(get(prop));
 
@@ -73,19 +73,19 @@ const user = {
 get('agez')(user); // undefined
 mget('agez')(user); // None
 mget('age')(user); // Some(25)
-{% endhighlight %}
+```
 
 We are then able to compose multiple `mget` functions together, handling application on the Maybe containers using `fmap` and `bind`.
 
-{% highlight js %}
+```js
 const fmap = curry((fn, functor) => functor.fmap(fn));
 const bind = curry((fn, monad) => monad.bind(fn));
-{% endhighlight %}
+```
 
 You will notice that `fmap` double wraps the resulting value, this is due to as being a Functor definition its' action is to wrap the resulting value (from our provided function) back into the given container.
 However, in the case of the `bind` Monad definition, it instead does not wrap the value back into the container upon completion, but instead relies on the function itself to return the correctly typed value.
 
-{% highlight js %}
+```js
 const getStreet = compose(fmap(mget('street')), mget('address'));
 getStreet({ address: {} }); // Some(None)
 getStreet(user); // Some(Some(Cinder Drive))
@@ -93,7 +93,7 @@ getStreet(user); // Some(Some(Cinder Drive))
 const getStreet = compose(bind(mget('street')), mget('address'));
 getStreet({ address: {} }); // None
 getStreet(user); // Some(Cinder Drive)
-{% endhighlight %}
+```
 
 ### Mimicking Do Notation in JavaScript
 
@@ -101,7 +101,7 @@ You will notice when looking through Haskell examples how succinct the do notati
 We are able to take advantage of the ability to phase JavaScript functions as strings to rewrite a language similar to this notation into one that can be executed.
 This allows us to clearly express the intent of the code as opposed to muddling it with the plumbing required to make it work with the containers.
 
-{% highlight js %}
+```js
 const doM = (function() {
   const tokenize = (exp) => exp
     .toString()
@@ -130,4 +130,4 @@ doM(() => {
   street <= mget('street')(address)
   return street
 }); // Some(Cinder Drive)
-{% endhighlight %}
+```

@@ -9,7 +9,7 @@ Looking at the code below you can see that I took advantage of the `cond` macro 
 I have also provided a couple of test assertions which are stored in the vars metadata and called using the core libraries `test` function.
 <!--more-->
 
-{% highlight clojure %}
+```clojure
 (defn balanced?
   {:test #(do
             (assert (true? (balanced? "(hello(world))")))
@@ -23,4 +23,4 @@ I have also provided a couple of test assertions which are stored in the vars me
           :else (recur xs count))))
 
 (test #'balanced?) ; :ok
-{% endhighlight %}
+```

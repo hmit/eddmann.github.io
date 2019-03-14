@@ -8,7 +8,7 @@ In a [previous article](/posts/fetching-link-titles-using-promises-and-async-awa
 However, we are instead able to use Generators (introduced in ES2015) to provide this feature, minus the syntactic sugar these two new keywords provide.
 <!--more-->
 
-{% highlight js %}
+```js
 const spawn = (fn) => (...args) => {
   const gen = fn(...args);
   const cont = (res) => res.done
@@ -19,7 +19,7 @@ const spawn = (fn) => (...args) => {
 
   return cont(gen.next());
 }
-{% endhighlight %}
+```
 
 Passing in a Generator function and yielding in-place of `await`, we are able to take advantage of the Generators control we have for resuming its execution.
 This allows us to wait for the resolution or rejection of the yielded promise before continuing to the next yield or final value.
@@ -28,7 +28,7 @@ This allows us to wait for the resolution or rejection of the yielded promise be
 
 Below is a contrived example of using co-routines to coordinate the returned result of a collection of random promises (similar to a `Promise.all` use-case).
 
-{% highlight js %}
+```js
 const randomPromise = (value) =>
   new Promise((res, rej) => setTimeout(Math.random() > 0.3 ? res : rej, 1000, value));
 
@@ -55,4 +55,4 @@ run(['foo', 'bar', 'baz'])
   .catch(console.error);
 // [ 'foo', 'bar ✗', 'baz' ]
 // run: 1012ms
-{% endhighlight %}
+```

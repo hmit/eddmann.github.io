@@ -11,7 +11,7 @@ However, I was able to take advantage of insertion/update triggers to again prov
 <!--more-->
 I should note that I'm in favor of having business critical constraints placed within the database layer, even if this seems like a blurring of responsibility between application logic and the data-store.
 
-{% highlight sql %}
+```sql
 CREATE OR REPLACE FUNCTION valid_record_email_address()
 RETURNS TRIGGER
 AS $$
@@ -28,15 +28,15 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 SQL;
-{% endhighlight %}
+```
 
-{% highlight sql %}
+```sql
 CREATE TRIGGER validate_record_email_address
 BEFORE INSERT OR UPDATE ON records
 FOR EACH ROW
     EXECUTE PROCEDURE valid_record_email_address();
 SQL;
-{% endhighlight %}
+```
 
 As you can see within PostgreSQL we are able to write extremely clear trigger functions which can be used to alter actions that occur in the database.
 We hope that the application layer will safe-guard us from an attempt to break this invariant, but as this is a critical area of our domain we can provide another level of validation just to make sure.

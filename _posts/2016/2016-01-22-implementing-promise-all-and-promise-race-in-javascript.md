@@ -14,7 +14,7 @@ This lunchtime I decided to see how one would go about implementing two concepts
 This function is used to compose multiple supplied promises into a single returned promise that provides the resulting values in array form.
 Looking at the implementation documented below you can see how relativity easy it is to compose these promises together, adding logic in-between resolutions to accumulate the final value returned.
 
-{% highlight js %}
+```js
 const all = (...promises) => {
   const results = [];
 
@@ -24,11 +24,11 @@ const all = (...promises) => {
 
   return merged.then(() => results);
 };
-{% endhighlight %}
+```
 
 We are able to use this solution in a couple of contrived examples, initially highlighting the 'happy path' of three separate promises being resolved, before moving on to handling the case were a promise is rejected.
 
-{% highlight js %}
+```js
 const p1 = Promise.resolve('foo');
 const p2 = 'bar';
 const p3 = new Promise((res, rej) => { setTimeout(res, 100, 'baz') });
@@ -43,7 +43,7 @@ all(p1, p2, p3, p4)
   .then(([a1, a2, a3]) => console.log(a1, a2, a3))
   .catch(e => console.log(e));
 // "qux"
-{% endhighlight %}
+```
 
 ## Promise.race
 
@@ -51,16 +51,16 @@ Following on from the `all` implementation we are able to implement the `race` f
 This function returns the first complete (resolved or rejected) promise from a supplied collection.
 Wrapping the supplied promises within a new promise who's resolved and rejected function are called based on their actions, allows you to see how the race condition works.
 
-{% highlight js %}
+```js
 const race = (...promises) =>
   new Promise((res, rej) => {
     promises.forEach(p => p.then(res).catch(rej));
   });
-{% endhighlight %}
+```
 
 We are able to highlight this implementation in an example, first depicting the 'happy path', followed by a rejection which is returned due to 'winning the race'.
 
-{% highlight js %}
+```js
 const p1 = new Promise((res, rej) => { setTimeout(res, 100, 'foo') });
 const p2 = new Promise((res, rej) => { setTimeout(res, 200, 'bar') });
 
@@ -71,4 +71,4 @@ const p3 = new Promise((res, rej) => { setTimeout(rej, 50, 'baz') });
 race(p1, p2, p3)
   .then(a => console.log(a))
   .catch(e => console.log(e)); // "baz"
-{% endhighlight %}
+```

@@ -9,36 +9,36 @@ Before this addition, every new function defined its own `this` - meaning we wer
 <!--more-->
 The two technique used to overcome this problem are highlighted below, using a locally stored `this` reference or a bound function.
 
-{% highlight js %}
+```js
 function Counter() {
   var _this = this;
   _this.counter = 0;
   this.inc = function () { _this.counter++; };
 };
-{% endhighlight %}
+```
 
-{% highlight js %}
+```js
 function Counter() {
   this.counter = 0;
   this.inc = function () { this.counter++; }.bind(this);
 };
-{% endhighlight %}
+```
 
 The contrived example usage below shows passing the counters `inc` method to a high-order function and asserting the desired `this` behavior.
 
-{% highlight js %}
+```js
 var c = new Counter();
 
 setInterval(c.inc, 1000);
 setInterval(function() { console.log(c.counter); }, 1500);
 // 1, 2, 3, 4, 5
-{% endhighlight %}
+```
 
 With the introduction of Arrow functions, the `this` value is instead captured based on the enclosing context, resulting in more readable code.
 
-{% highlight js %}
+```js
 function Counter() {
   this.counter = 0;
   this.inc = () => { this.counter++; }
 };
-{% endhighlight %}
+```

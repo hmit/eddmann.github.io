@@ -10,10 +10,10 @@ I experimented with some interesting aspects of the library by implementing the 
 
 ## Random Number Generation
 
-{% highlight clojure %}
+```clojure
 (defn numbers [n]
   (take n (repeatedly #(rand-int 100))))
-{% endhighlight %}
+```
 
 Using the above function we are able to take advantage of lazy sequences to create an infinite list of random integers.
 This infinite list is made finite (using `take`) when supplying the function with the desired amount of numbers required.
@@ -22,27 +22,27 @@ This infinite list is made finite (using `take`) when supplying the function wit
 
 The first implementation documented declaratively describes the QuickSort algorithm, using collection filtering to split the input based on the selected pivot.
 
-{% highlight clojure %}
+```clojure
 (defn quick-sort [[pivot & coll]]
   (when pivot
     (concat (quick-sort (filter #(< % pivot) coll))
             [pivot]
             (quick-sort (filter #(>= % pivot) coll)))))
-{% endhighlight %}
+```
 
 ## Solution 2
 
 The second implementation removes the duplication created by the two filtering predicates, specifying a single `greater?` function which is used by both filtering and subsequently removing (the inverse) from the supplied collection.
 We also employ the use of the lazy concatenation function which returns a lazy sequence which is only evaluated when required.
 
-{% highlight clojure %}
+```clojure
 (defn quick-sort [[pivot & coll]]
   (when pivot
     (let [greater? #(> % pivot)]
       (lazy-cat (quick-sort (remove greater? coll))
                 [pivot]
                 (quick-sort (filter greater? coll))))))
-{% endhighlight %}
+```
 
 ## Solution 3
 
@@ -50,11 +50,11 @@ The final implementation uses the `group-by` function provided by the core libra
 Using this function neatly allows us to partition the collection into two separate lists in an extremely expressive manner.
 We are then able to destructure the returned map, assigning the true and false values to more clearly named lesser and greater variables.
 
-{% highlight clojure %}
+```clojure
 (defn quick-sort [[pivot & coll]]
   (when pivot
     (let [{lesser false greater true} (group-by #(> % pivot) coll)]
       (lazy-cat (quick-sort lesser)
                 [pivot]
                 (quick-sort greater)))))
-{% endhighlight %}
+```

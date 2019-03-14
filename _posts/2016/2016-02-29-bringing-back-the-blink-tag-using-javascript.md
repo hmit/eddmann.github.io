@@ -8,7 +8,7 @@ Who doesn't miss the the `blink` tag that was ever-present in years past.
 I thought it would be fun to quickly code up a JavaScript implementation which replicated the functionality that has 'sadly' been removed in modern browsers.
 <!--more-->
 
-{% highlight js %}
+```js
 document.addEventListener('DOMContentLoaded', function () {
   setInterval(function () {
     [].forEach.call(document.getElementsByTagName('blink'), function (el) {
@@ -16,4 +16,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }, 500);
 });
-{% endhighlight %}
+```

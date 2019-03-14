@@ -9,17 +9,17 @@ What happens however, when you wish to use an asynchronous function which does n
 It is actually pretty simple to abstract away the error-first asynchronous function callback into a Promise we can handle.
 <!--more-->
 
-{% highlight js %}
+```js
 const promisify = (fn) => (...args) =>
   new Promise((res, rej) =>
     fn(...args, (err, val) => err ? rej(err) : res(val)));
-{% endhighlight %}
+```
 
 We are now able to wrap a function which uses the error-first callback paradigm into a Promise, as demoed below.
 
-{% highlight js %}
+```js
 promisify(fs.readFile)('./hello.txt', 'utf8')
   .then(console.log)
   .catch(console.error);
 // Hello, world!
-{% endhighlight %}
+```

@@ -8,7 +8,7 @@ Whilst currently reading through [The Joy of Clojure](https://www.manning.com/bo
 To experiment with this feature I decided to create a simple merge-sort algorithm implementation which provided the post invariant that its returned values were sorted by the provided predicate.
 <!--more-->
 
-{% highlight clojure %}
+```clojure
 (defn sorted? [pred? col]
   (every? #(apply pred? %) (partition 2 1 col)))
 
@@ -33,14 +33,14 @@ To experiment with this feature I decided to create a simple merge-sort algorith
       col
       (let [[left right] (half col)]
         (merge pred? (merge-sort pred? left) (merge-sort pred? right))))))
-{% endhighlight %}
+```
 
 I really liked the manner in which I could use the 'partition' function to succinctly map the task of splitting on each co-located pair of values within a collection in code.
 We are able to then put this implementation into practice by optionally providing a predicate (else defaulting to ascending order).
 
-{% highlight clojure %}
+```clojure
 (def numbers (shuffle (range 1 11))) ; [1 9 7 2 10 3 6 5 4 8]
 
 (merge-sort numbers) ; (1 2 3 4 5 6 7 8 9 10)
 (merge-sort > numbers) ; (10 9 8 7 6 5 4 3 2 1)
-{% endhighlight %}
+```

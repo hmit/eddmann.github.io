@@ -9,10 +9,10 @@ Wikipedia does a very good job of [explaining the laws](https://en.wikipedia.org
 Whilst programming, predicate logic of this form appears very frequently, and it is very useful to know how you can rewrite a predicate to better describe its intent.
 <!--more-->
 
-{% highlight js %}
+```js
 // Negation of conjunction
 (!a && !b) == !(a || b)
 
 // Negation of disjunction
 (!a || !b) == !(a && b)
-{% endhighlight %}
+```

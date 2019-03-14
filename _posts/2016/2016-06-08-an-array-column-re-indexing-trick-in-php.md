@@ -9,7 +9,7 @@ However, I just found out that you can provide a third argument that allows you 
 This combined with `null` for the value argument allows you to easily re-index an array based on a key value whilst maintaining the original arrays values and ordering.
 <!--more-->
 
-{% highlight php %}
+```php
 $arr = [
     ['id' => 123, 'name' => 'Joe'],
     ['id' => 345, 'name' => 'Sally']
@@ -17,4 +17,4 @@ $arr = [
 
 array_column($arr, null, 'id'); // [ 123 => ['id' => 123, 'name' => 'Joe'] ...
 array_column($arr, 'name', 'id'); // [ 123 => 'Joe', 345 => 'Sally' ...
-{% endhighlight %}
+```

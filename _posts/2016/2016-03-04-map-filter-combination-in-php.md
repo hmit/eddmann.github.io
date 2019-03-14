@@ -9,16 +9,14 @@ Although a `map-filter` combination can be achieved in a single `reduce`, readin
 This means that you can simply map over a collection and return `false` if the desired predicate does not match - leaving the filter to do the clean-up.
 <!--more-->
 
-{% highlight php %}
-<?php
+```php
 function array_map_filter($fn, ...$arr)
 {
     return array_filter(array_map($fn, ...$arr));
 }
-{% endhighlight %}
+```
 
-{% highlight php %}
-<?php
+```php
 $users = [
     [ 'id' => 1, 'name' => 'Joe' ],
     [ 'id' => 2, 'name' => 'Bob' ],
@@ -28,4 +26,4 @@ $users = [
 array_map_filter(function ($user) {
     return $user['id'] == 2 ? false : $user['name'];
 }, $users); // [ 'Joe', 'Sally' ]
-{% endhighlight %}
+```

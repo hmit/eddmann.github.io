@@ -13,7 +13,7 @@ This can be resolved by either padding out the arrays with empty values, or only
 I decided that I would be a little lenient in my implementation and create a single function that could handle nth-collections of differing lengths.
 The first implementation below achieves this by only including elements up-to the shortest collections length.
 
-{% highlight js %}
+```js
 const shortest = (a, b) => a.length < b.length ? a : b;
 
 const zip = (...arrs) =>
@@ -21,11 +21,11 @@ const zip = (...arrs) =>
 
 zip(['a', 'b', 'c'], [1 , 2, 3]);
 // [['a', 1], ['b', 2], ['c', 3]]
-{% endhighlight %}
+```
 
 The implementation below instead pads out arrays which are not of the maximum length with empty values.
 
-{% highlight js %}
+```js
 const longest = (a, b) => a.length > b.length ? a : b;
 
 const zipLongest = (...arrs) =>
@@ -33,12 +33,12 @@ const zipLongest = (...arrs) =>
 
 zipLongest(['a', 'b', 'c', 'd'], [1, 2, 3]);
 // [['a', 1], ['b', 2], ['c', 3], ['d', undefined]]
-{% endhighlight %}
+```
 
 An interesting use-case that was discussed was being able to easily create a collection which includes the element along with their successor/predecessor.
 This can be useful in cases were (upon iteration) a decision is dependent on the elements neighboring values.
 
-{% highlight js %}
+```js
 const alpha = ['a', 'b', 'c', 'd', 'e', 'f'];
 
 // elements with successor
@@ -46,4 +46,4 @@ zip(alpha, alpha.slice(1));
 
 // elements with predecessor
 zip(alpha, [undefined, ...alpha.slice(0, alpha.length - 1)]);
-{% endhighlight %}
+```

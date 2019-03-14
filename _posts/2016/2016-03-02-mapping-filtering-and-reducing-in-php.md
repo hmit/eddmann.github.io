@@ -13,22 +13,20 @@ Although trivial in nature, it is a great place to highlight the power of the pa
 Below you will find the initial collection of user entires we wish to process.
 The objective is to create a function which returns only the users names, excluding however, the one associated to a supplied id.
 
-{% highlight php %}
-<?php
+```php
 $users = [
     [ 'id' => 1, 'name' => 'Joe' ],
     [ 'id' => 2, 'name' => 'Bob' ],
     [ 'id' => 3, 'name' => 'Sally' ],
 ];
-{% endhighlight %}
+```
 
 ### Imperative Approach
 
 Looking at this problem with an imperative mindset leads us to iterating through the collection, adding names to a temporary collection which match the desired predicate.
 This boilerplate code is sprinkled throughout many code-bases, and although correct, I feel can be improved upon in its intent and expression.
 
-{% highlight php %}
-<?php
+```php
 function getNames(array $users, $excludeId)
 {
     $names = [];
@@ -41,7 +39,7 @@ function getNames(array $users, $excludeId)
 
     return $names;
 }
-{% endhighlight %}
+```
 
 ### Mapping and Filtering
 
@@ -50,8 +48,7 @@ As their names suggests, mapping over a collection applies the given function to
 Using these two functions we are able to break apart the problem very clearly into its two individual pieces.
 Unfortunately however, within PHP we do have to provide quiet verbose declarations, but the intent I feel is still more clearly highlighted.
 
-{% highlight php %}
-<?php
+```php
 function getNames(array $users, $excludeId)
 {
     $filtered = array_filter($users, function ($u) use ($excludeId) {
@@ -60,7 +57,7 @@ function getNames(array $users, $excludeId)
 
     return array_map(function ($u) { return $u['name']; }, $filtered);
 }
-{% endhighlight %}
+```
 
 ### Reducing
 
@@ -71,8 +68,7 @@ This may sound similar to a `map`, however the addition of an accumulator value 
 Using this higher-order function provides you with far more flexibility in the resulting transformation.
 Were as mapping focuses on transforming individual elements, and filtering removes elements from the collection, reducing can do both and so much more.
 
-{% highlight php %}
-<?php
+```php
 function getNames(array $users, $excludeId)
 {
     return array_reduce($users, function ($acc, $u) use ($excludeId) {
@@ -83,7 +79,7 @@ function getNames(array $users, $excludeId)
         return array_merge($acc, [ $u['name'] ]);
     }, []);
 }
-{% endhighlight %}
+```
 
 Again sadly PHP's syntax leaves a lot to be desired in regard to declaration of lambda functions and immutable arrays.
 However, again the intent of the code to me has been significantly improved from the original imperative solution.

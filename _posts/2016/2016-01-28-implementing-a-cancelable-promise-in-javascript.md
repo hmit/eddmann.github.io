@@ -9,7 +9,7 @@ This was due to a uncompleted promise being resolved when the component had sinc
 To solve this issue I was able to use the concept of a cancelable promise which would be canceled before the component was unmounted.
 <!--more-->
 
-{% highlight js %}
+```js
 const cancelable = (promise) => {
   let hasCancelled = false;
 
@@ -24,11 +24,11 @@ const cancelable = (promise) => {
     cancel: () => hasCancelled = true
   }
 };
-{% endhighlight %}
+```
 
 With the above implementation we are now able to produce some contrived examples to highlight its use.
 
-{% highlight js %}
+```js
 const log = console.log.bind(console);
 
 const delayed = (v, t) =>
@@ -41,4 +41,4 @@ x.promise.then(log).catch(log); // { isCancelled: true }
 
 const y = delayed('bar', 250);
 y.promise.then(log).catch(log); // bar
-{% endhighlight %}
+```

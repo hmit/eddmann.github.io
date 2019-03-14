@@ -8,7 +8,7 @@ Following on from my [previous solution](/posts/bubble-sort-in-clojure/) to impl
 Taking advantage of lists and vectors respective cheap head and tail insertions, we can use these two properties to good effect as shown below.
 <!--more-->
 
-{% highlight clojure %}
+```clojure
 (defn- bubble
   ([xs] (bubble xs [] false))
   ([[x y & xs] ys changed]
@@ -25,7 +25,7 @@ Taking advantage of lists and vectors respective cheap head and tail insertions,
       ys)))
 
 (bubble-sort [3 2 1]) ; [1 2 3]
-{% endhighlight %}
+```
 
 Replacing the `reduce` used previously with a concise recursive function you are able to see how the pass phase is complete - using a `changed` flag to signal an alteration occurring within the iteration.
 The implementation is again split up into a main and helper function which allows us to clearly see the separation between the conditional pass loop and bubble action.

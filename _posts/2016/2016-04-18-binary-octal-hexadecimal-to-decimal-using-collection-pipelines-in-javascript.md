@@ -12,7 +12,7 @@ I thought it would again be interesting to see how I would go about performing t
 
 I began by implementing the binary to decimal function, following the signature present in PHP's `bindec` function.
 
-{% highlight js %}
+```js
 const bindec = binary => binary
   .split('')
   .reverse()
@@ -21,7 +21,7 @@ const bindec = binary => binary
     0);
 
 bindec('1100100'); // 100
-{% endhighlight %}
+```
 
 Looking at the implementation above, you will notice how we are able to break up the problem into a list of transformations.
 Starting by splitting up the string binary representation into characters, we then reverse this sequence and reduce the collection down into the single decimal result.
@@ -30,7 +30,7 @@ Starting by splitting up the string binary representation into characters, we th
 
 From here I decided to see how easy it would be to re-create the `octdec` function.
 
-{% highlight js %}
+```js
 const octdec = octal => octal
   .split('')
   .reverse()
@@ -39,7 +39,7 @@ const octdec = octal => octal
     0);
 
 octdec('144'); // 100
-{% endhighlight %}
+```
 
 Again following a similar shape to the transformations present in the previous example we only have to update the logic present in the reduce phase.
 
@@ -48,7 +48,7 @@ Again following a similar shape to the transformations present in the previous e
 Finally, I decided to explore an implementation to convert hexadecimal representations into decimal.
 This transformation pipeline requires an additional mapping phase to transform the alphabetical representations (A to F) into their decimal equivalents.
 
-{% highlight js %}
+```js
 const hexdec = hexadecimal => hexadecimal
   .split('')
   .reverse()
@@ -58,4 +58,4 @@ const hexdec = hexadecimal => hexadecimal
     0);
 
 hexdec('64'); // 100
-{% endhighlight %}
+```

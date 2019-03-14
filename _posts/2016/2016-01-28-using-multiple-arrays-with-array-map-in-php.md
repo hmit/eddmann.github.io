@@ -14,7 +14,7 @@ This allows for some rather elegant solutions to the 'index issue' and accessing
 Using the `range` function we are able to supply a sequence of indexes based on the collection.
 This allows us to access the current index from within the callback function.
 
-{% highlight php startinline %}
+```php
 $users = [ 'Joe', 'Bob', 'Sam' ];
 
 array_map(function ($name, $position) {
@@ -24,14 +24,14 @@ array_map(function ($name, $position) {
 // [ position => 1, name => 'Joe' ]
 // [ position => 2, name => 'Bob' ]
 // [ position => 3, name => 'Sam' ]
-{% endhighlight %}
+```
 
 ## Key-Value Access
 
 One use-case that a `foreach` provides is the ability to destructure an associative array, allowing you to access the key and value.
 In its basic form an `array_map` seems to be missing this capability, however, with the ability to supply multiple arrays this is not the case.
 
-{% highlight php startinline %}
+```php
 $users = [ 123 => 'Joe', 456 => 'Bob', 789 => 'Sam' ];
 
 array_map(function ($id, $name) {
@@ -41,4 +41,4 @@ array_map(function ($id, $name) {
 // [ id => 123, name => 'Joe' ]
 // [ id => 456, name => 'Bob' ]
 // [ id => 789, name => 'Sam' ]
-{% endhighlight %}
+```

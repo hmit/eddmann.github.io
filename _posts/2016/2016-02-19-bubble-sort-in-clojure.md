@@ -9,7 +9,7 @@ This sort works by iteratively passing through the supplied sequence, swapping t
 The operation is complete when a pass through the sequence does not result in a swap occurring.
 <!--more-->
 
-{% highlight clojure %}
+```clojure
 (defn- bubble [ys x]
   (if-let [y (peek ys)]
     (if (> y x)
@@ -24,7 +24,7 @@ The operation is complete when a pass through the sequence does not result in a 
       (recur ys))))
 
 (bubble-sort [3 2 1]) ; [1 2 3]
-{% endhighlight %}
+```
 
 Looking at the implementation above you will notice we use a `reduce` operation with a private `bubble` function which provides us with the pass through the sequence.
 Upon each pass the result is checked against the input to see if a swap has occurred, in the case of them both being equal we have completed the sorting process.

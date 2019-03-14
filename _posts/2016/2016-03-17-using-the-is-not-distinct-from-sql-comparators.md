@@ -11,16 +11,16 @@ This occurs as `NULL` in its strictest sense is an unknown value, and as such th
 However, if you wish to weaken this constraint within a comparison you are able to take advantage of `IS DISTINCT FROM` which instead treats `NULL` as a known value.
 This difference can be best highlighted in a small logic table, where we first describe how the presence of a `NULL` value takes over the entire predicate result.
 
-{% highlight sql %}
+```sql
 NULL != NULL = NULL
 NULL != TRUE = NULL
 TRUE != NULL = NULL
-{% endhighlight %}
+```
 
 Using the `IS DISTINCT FROM` comparator instead, we are able to treat `NULL` as a known value, which then returns the desired boolean result.
 
-{% highlight sql %}
+```sql
 NULL IS DISTINCT FROM NULL = FALSE
 NULL IS DISTINCT FROM TRUE = TRUE
 TRUE IS DISTINCT FROM NULL = TRUE
-{% endhighlight %}
+```

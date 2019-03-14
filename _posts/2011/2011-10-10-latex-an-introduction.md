@@ -37,21 +37,21 @@ A screenshot of TeXShop in action
 Creating a simple LaTeX document could not be any simpler.
 Similar to how you have to structure a HTML document, a basic LaTeX structure is required.
 
-{% highlight tex %}
+```tex
 \documentclass{article}
 \begin{document}
 Hello LaTeX!
 \end{document}
-{% endhighlight %}
+```
 
 In a few lines we are able to create a document which can be easily processed using LaTeX into a variety of formats.
 The first line is used to tell LaTeX how to format the document (heading, spacing, etc.).
 There are many different document formats available to you, ranging from *minimal* to *book* - though further explanation is a beyond an introductory article.
 The final block of required markup is the document contents.
 
-{% highlight bash %}
+```bash
 $ pdflatex hello.tex
-{% endhighlight %}
+```
 
 Finally, to generate the sample document as a PDF article the simple line above must be executed in the terminal.
 The resulting PDF from running this command is available [here](/uploads/latex-an-introduction/latex-basic.pdf).
@@ -61,7 +61,7 @@ The resulting PDF from running this command is available [here](/uploads/latex-a
 Now that we are familiar with the basic process of creating and generating output from a LaTeX document, we can begin to use some of the more powerful features available to us.
 As I explained at the beginning of this article, LaTeX provides you with a toolkit full of goodies that ease in the creation of both small and large documents (of varying types).
 
-{% highlight tex %}
+```tex
 \documentclass{article}
 \usepackage{graphicx}
 \begin{document}
@@ -79,7 +79,7 @@ As I explained at the beginning of this article, LaTeX provides you with a toolk
 \end{tabular}
 
 \end{document}
-{% endhighlight %}
+```
 
 The above example introduces multiple features available to you (outputted result available [here](/uploads/latex-an-introduction/latex-advanced.pdf)), ranging from including a resized image to a formatted table.
 Reading through the example you will notice that the first difference from the first code snippet is the use of packages.

@@ -5,7 +5,7 @@ meta: "Sometimes it pays-off to keep development simple."
 ---
 
 I recently had the chance to rewrite the backend of my [personal website](http://github.com/eddmann/eddmann).
-I was suprised at how accustom I had become to using heavy-weight web frameworks (with plenty of accompanying depencies) in larger projects I am involved in, that I instead decided to do the complete opposite.
+I was surprised at how accustom I had become to using heavy-weight web frameworks (with plenty of accompanying depencies) in larger projects I am involved in, that I instead decided to do the complete opposite.
 As a result, I built a very simple single-page Markdown file-based blogging platform (inc. pagination, caching) that only takes a few moments to read.
 I find myself sometimes being blinded by the need to abstract everything with the Object-oriented philosophy, never taking the time to consider that in many cases it pays off to keep things simple.
 Simple, single purpose functions that can be used for multiple use-cases within your application is a very good mind-set to try and incorporate.
@@ -18,7 +18,7 @@ This function was inspired by Laravel's ability to parse associative arrays usin
 As you can see this is an extremely easy to read function that simply requires the supplied configuration file once (using a static variable).
 It then attempts to split up the supplied key, traversing through the configuration array to end at the result.
 
-{% highlight php startinline %}
+```php
 function config($key = '', $file = 'config.php')
 {
     static $config = null;
@@ -37,7 +37,7 @@ function config($key = '', $file = 'config.php')
 
     return $result;
 }
-{% endhighlight %}
+```
 
 ## Cache
 
@@ -47,7 +47,7 @@ The key is hashed and it's value stored in a file of that name.
 If there is a cache miss (i.e. first time accessing that key) the value closure will be executed and result stored in the described file.
 Provided is also a check to make sure a false boolean was not returned, allowing us to have control within the closure of whether to cache the result or not.
 
-{% highlight php startinline %}
+```php
 function cache($key, callable $value, $directory = './cache/')
 {
     ! is_dir($directory) && mkdir($directory);
@@ -66,7 +66,7 @@ function cache($key, callable $value, $directory = './cache/')
 
     return file_get_contents($path);
 }
-{% endhighlight %}
+```
 
 ## Template
 
@@ -74,7 +74,7 @@ This simple function allows you to easily parse template files with the provided
 I have found this to be very useful in splitting-up business logic from complex presentations (separation of concerns) in multiple examples.
 I have been alittle relaxed with my use of the dreaded 'eval' function but as we are the only ones who will be working with the templates (no user-input), I feel this can be omitted.
 
-{% highlight php startinline %}
+```php
 function tmpl($file, $vars = [], $directory = './templates/')
 {
     ob_start();
@@ -85,14 +85,14 @@ function tmpl($file, $vars = [], $directory = './templates/')
 
     return ob_get_clean();
 }
-{% endhighlight %}
+```
 
 ## Example
 
 To piece all these functions together into a collective example I have decided to demonstrate with a cached fibonacci calculatation, the desired number being stored in a configuration file.
 Below is the example multi-level configuration file we will be using, defining that we wish to calculate the 50th fibonacci number.
 
-{% highlight php startinline %}
+```php
 # config.php
 
 return [
@@ -100,20 +100,20 @@ return [
         'calculate' => 50
     ]
 ];
-{% endhighlight %}
+```
 
 The below template is a simple example of splitting the presentation from code-logic.
 
-{% highlight php startinline %}
+```php
 # fibonacci.tmpl.php
 
 echo "The $n fibonacci number is: $result\n";
-{% endhighlight %}
+```
 
 Finally, to piece it all together we fetch the desired number from the configuration file and return the result from the cache (calling the value closure on the initial cache miss).
 The last step is to simply pass the template the two variables for displaying.
 
-{% highlight php startinline %}
+```php
 $n = config('fibonacci.calculate');
 
 $result = cache('fibonacci_' . $n, function() use ($n)
@@ -130,4 +130,4 @@ $result = cache('fibonacci_' . $n, function() use ($n)
 });
 
 echo tmpl('fibonacci.tmpl.php', compact('n', 'result'));
-{% endhighlight %}
+```

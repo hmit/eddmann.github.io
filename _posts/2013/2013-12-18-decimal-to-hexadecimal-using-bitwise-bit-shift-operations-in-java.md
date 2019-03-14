@@ -19,7 +19,7 @@ With this knowledge we can now go about implementing the solution found below.
 
 ## Decimal to Hexadecimal
 
-{% highlight java %}
+```java
 public static String toHexString(int decimal)
 {
     String codes = "0123456789ABCDEF";
@@ -35,7 +35,7 @@ public static String toHexString(int decimal)
 
     return builder.toString();
 }
-{% endhighlight %}
+```
 
 In the above implementation I first make a 'StringBuilder' instance with the initial size capacity of 8 (instead of the default 16).
 I then subsequently set the current length of the instance to the full 8, which pads the string with null values ('\u0000').
@@ -48,7 +48,7 @@ Finally, once the loop has finished I return a string representation of the buil
 
 ## Example Usage
 
-{% highlight java %}
+```java
 int min = Integer.MIN_VALUE; // -2147483648
 int max = Integer.MAX_VALUE; // 2147483647
 
@@ -60,7 +60,7 @@ System.out.printf(
     (min == (int) Long.parseLong(minHex, 16) ? '\u2714' : '\u2717'),
     (max == Integer.parseInt(maxHex, 16) ? '\u2714' : '\u2717')
 ); // valid: min ✔, max ✔
-{% endhighlight %}
+```
 
 Above are a couple of examples which show the solution being used to represent the minimum and maximum possible integer values.
 One issue that did arise was when converting the minimum value back to a decimal representation.
@@ -79,12 +79,12 @@ There are only two points I would like to make about the code below, most import
 This is due to hex-triplets only using 6 positions, which means the most significant two are not required.
 Also Java's 'nextInt' method is inclusive of 0 and exclusive of the provided maximum value, so we must add one to the desired range to return a correct result.
 
-{% highlight java %}
+```java
 public static String randomWebColour()
 {
     return "#" + toHexString(new java.util.Random().nextInt(16777216)).substring(2);
 }
-{% endhighlight %}
+```
 
 ## Resources
 

@@ -15,7 +15,7 @@ An example of such an abstraction is the [garbage collector](http://javabook.com
 
 To display each values binary representation in the experiment we could simply use the [Integer.toBinaryString](http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html#toBinaryString(int)) method, however, as this is a learning exercise below are two alternative implementation.
 
-{% highlight java %}
+```java
 public static String toBin(int decimal)
 {
     if (decimal == 0) return "0";
@@ -29,21 +29,21 @@ public static String toBin(int decimal)
 
     return sb.reverse().toString();
 }
-{% endhighlight %}
+```
 
 The first example uses a bitwise and shift operation to inspect each bit of the integer value.
 This implementation handles the use-case of being initially supplied with a decimal value of zero.
 The resulting value is built up using a StringBuilder and reversed before the string instance is created.
 This is required as we wish to represent the least significant digit at the right most position.
 
-{% highlight java %}
+```java
 public static String toBin(int decimal)
 {
     return (decimal > 0)
         ? toBin(decimal / 2) + (decimal % 2)
         : "";
 }
-{% endhighlight %}
+```
 
 The second example instead uses division and modulus to recursively build up a string representation to return.
 
@@ -52,13 +52,13 @@ The second example instead uses division and modulus to recursively build up a s
 Directing attention back to the algorithm, no stipulations are placed on value, however, due to [aliasing](http://en.wikipedia.org/wiki/Aliasing_(computing)) concerns the two variables must be stored in different (distinct) memory address spaces.
 With this knowledge in hand, we can now produce an example of the algorithm.
 
-{% highlight java %}
+```java
 int x, y;
 x = 1, y = 2; // x=01, y=10
 x = x ^ y;    // x=11, y=10
 y = x ^ y;    // x=11, y=01
 x = x ^ y;    // x=10, y=01
-{% endhighlight %}
+```
 
 After initialising the two integers we combine (XOR) the two values, storing the resulting value back into the first variable.
 As the XOR operation is [commutative](http://en.wikipedia.org/wiki/Commutative_property), we are free to change the operand ordering of any or all three of the statements.

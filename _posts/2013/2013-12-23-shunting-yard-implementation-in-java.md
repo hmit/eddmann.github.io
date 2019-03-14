@@ -11,7 +11,7 @@ Below is an example implementation which only takes into consideration bracket a
 Although it is possible to evaluate more, including functions and associativity, I decided on keeping the implementation simple to better highlight the process.
 <!--more-->
 
-{% highlight java %}
+```java
 {% raw %}
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class ShuntingYard {
 
 }
 {% endraw %}
-{% endhighlight %}
+```
 
 The example implementation above first creates an enumerated type called 'Operator' which stores the incrementing precedence of the four operators.
 Following this a map is initalised using [double bracket syntax](http://c2.com/cgi/wiki?DoubleBraceInitialization), pairing the enumerated type with its symbol equivalent.
@@ -83,10 +83,10 @@ When this is the case, the stack contents is added to the output string until it
 If the token is an operator each stack operator item is appended to the output string until the token operator has a greater precedence, once complete the subject token is pushed to the stack.
 Finally, the remaining items in the stack are appended to the output builder and a string instance of the StringBuilder is returned.
 
-{% highlight java %}
+```java
 postfix("( 5 + 7 ) * 2") // 5 7 + 2 *
 postfix("5 + 7 / 2")     // 5 7 2 / +
-{% endhighlight %}
+```
 
 ## Resources
 

@@ -22,7 +22,7 @@ Obviously in a real-world setting this task would be handled by an heavily optim
 
 ## Java
 
-{% highlight java %}
+```java
 public class MergeSort {
 
     private static void merge(Comparable[] arr, Comparable[] tmp, int l, int m, int h)
@@ -60,7 +60,7 @@ public class MergeSort {
     }
 
 }
-{% endhighlight %}
+```
 
 As you can see from the above example, the sorting routine consists of three separate methods, resulting in an in-place sort.
 A temporary array is created once (same in size) and used to aid in the merging routine of the algorithm.
@@ -70,7 +70,7 @@ However, this example successfully shows the key ingredients for implementing su
 
 ## Scala
 
-{% highlight scala %}
+```scala
 def mergeSort[T](pred: (T, T) => Boolean)(xs: List[T]): List[T] = {
     def merge(ls: List[T], rs: List[T]): List[T] = (ls, rs) match {
         case (List(), _) => rs
@@ -90,7 +90,7 @@ def mergeSort[T](pred: (T, T) => Boolean)(xs: List[T]): List[T] = {
 
 val intSort = mergeSort((_: Int) < (_: Int)) _
 println(intSort(List(4, 2, 1, 3)))
-{% endhighlight %}
+```
 
 Well this looks alittle different, only two declared functions by-name, lets go through it piece-by-piece.
 The first point of note is the use of [Currying](http://en.wikipedia.org/wiki/Currying) to initially provide a comparable predicate, followed then by the list of values.

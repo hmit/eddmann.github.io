@@ -16,7 +16,7 @@ Setting the values as incremental powers of 2 allows the user to compose multipl
 The implementer is then able to base the methods execution on the passed in flags by checking for presence of the constant value using the & (AND) operator as a bit mask.
 This idea can be more meaningfully described using the example below.
 
-{% highlight java %}
+```java
 public static final int UPPERCASE = 1;  // 0001
 public static final int REVERSE   = 2;  // 0010
 public static final int FULL_STOP = 4;  // 0100
@@ -35,14 +35,14 @@ public static String format(String value, int flags)
 
     return value;
 }
-{% endhighlight %}
+```
 
 As you can see, I have defined 5 different constants all with specific values that correspond to different binary representations.
 In regard to the final constant which I set to the decimal 15, in essence this fills in all of the previously created value combinations.
 Within the method block I check for presence of each flag by masking the 'flags' parameter with the constant value.
 If the resulting value is equal to the specified constant we can then act on this condition.
 
-{% highlight java %}
+```java
 format("Joe", UPPERCASE); // JOE
 
 format("Joe", REVERSE); // eoJ
@@ -50,7 +50,7 @@ format("Joe", REVERSE); // eoJ
 format("Joe", FULL_STOP | EMPHASISE); // ~*~ Joe. ~*~
 
 format("Joe", ALL_OPTS); // ~*~ EOJ. ~*~
-{% endhighlight %}
+```
 
 Above are a few examples of the method being used in multiple ways.
 The third example shows the ability of composing values from multiple flags (binary representation 1100).
@@ -64,15 +64,15 @@ Another glaring issue is that they are not type safe, nullifying the benefits of
 I should point out that there is another Set implementation called [BitSet](http://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) which provides similar functionality.
 It is recommended that if you desire a flagging system such as the use-case described an EnumSet will provide you with the best results.
 
-{% highlight java %}
+```java
 public enum Flag {
     UPPERCASE, REVERSE, FULL_STOP, EMPHASISE;
 
     public static final EnumSet<Flag> ALL_OPTS = EnumSet.allOf(Flag.class);
 }
-{% endhighlight %}
+```
 
-{% highlight java %}
+```java
 public static String format(String value, EnumSet<Flag> flags)
 {
     if (flags.contains(Flag.UPPERCASE)) value = value.toUpperCase();
@@ -85,13 +85,13 @@ public static String format(String value, EnumSet<Flag> flags)
 
     return value;
 }
-{% endhighlight %}
+```
 
 In the case of an EnumSet you must first define your enumerated type, which encapsulates all the desired constants.
 Similar to how I defined the 'ALL_OPTS' constant in the first example, I have created a EnumSet consisting of all constants in the Flag type.
 EnumSet implements the Set interface, so you can use it as you would a typical set, calling 'contains' on it to query presence of a certain flag.
 
-{% highlight java %}
+```java
 format("Sally", EnumSet.of(Flag.UPPERCASE)); // SALLY
 
 format("Sally", EnumSet.of(Flag.REVERSE)); // yllaS
@@ -99,7 +99,7 @@ format("Sally", EnumSet.of(Flag.REVERSE)); // yllaS
 format("Sally", EnumSet.of(Flag.FULL_STOP, Flag.EMPHASISE)); // ~*~ Sally. ~*~
 
 format("Sally", Flag.ALL_OPTS); // ~*~ YLLAS. ~*~
-{% endhighlight %}
+```
 
 Above are a few examples of using the EnumSet in place of a typical bit flag system.
 As you can see, we are able to complete all the examples that were possible in the previous use-case, but this time it is more readable and we are less prone to error.

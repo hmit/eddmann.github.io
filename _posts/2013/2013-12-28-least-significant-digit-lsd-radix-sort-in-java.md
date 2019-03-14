@@ -13,7 +13,7 @@ This implementation results in a [stable](http://en.wikipedia.org/wiki/Stable_so
 In a stable sorting algorithm the initial ordering of equal keys is left unchanged in the result.
 <!--more-->
 
-{% highlight java %}
+```java
 public static void radixSort(int[] arr)
 {
     Queue<Integer>[] buckets = new Queue[10];
@@ -42,14 +42,14 @@ public static void radixSort(int[] arr)
 
     assert isSorted(arr);
 }
-{% endhighlight %}
+```
 
 Above shows an example of a queue-based least significant digit radix sorting implementation.
 Starting from the right-most digit, the process occurs over multiple passes, distributing each item into calculated buckets, based on positional key.
 After each pass through the collection the items are retrieved in order from each bucket.
 This process is repeated up and including to the length of the longest key.
 
-{% highlight java %}
+```java
 private static boolean isSorted(int[] arr)
 {
     for (int i = 1; i < arr.length; i++)
@@ -58,7 +58,7 @@ private static boolean isSorted(int[] arr)
 
     return true;
 }
-{% endhighlight %}
+```
 
 To make sure that the resulting processed data set is correctly sorted an assertion was included.
 Using such a feature is great in development, allowing you to verify the correctness of a specific invariant.

@@ -13,23 +13,23 @@ Both will take advantage of the features PHP-FPM provides you, via FastCGI.
 The first step is to make sure we are currently the 'root' user (this saves on tedious sudoing through the installation).
 We then add the [EPEL](http://fedoraproject.org/wiki/EPEL) and [Remi](http://rpms.famillecollet.com/) YUM repositories, providing us with easy access to updated MySQL and PHP pre-compiled builds.
 
-{% highlight bash %}
+```bash
 $ sudo su -
 $ rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 $ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-{% endhighlight %}
+```
 
 ## MySQL
 
 Installation of the MySQL server and client is the next step, followed by configuring the associated daemon to run on start-up.
 It is then good practise to run the 'secure installation' script, which guides you through changing the root password etc.
 
-{% highlight bash %}
+```bash
 $ yum --enablerepo=remi install -y mysql mysql-server
 $ chkconfig --levels 235 mysqld on
 $ /etc/init.d/mysqld start
 $ /usr/bin/mysql_secure_installation
-{% endhighlight %}
+```
 
 ## PHP
 
@@ -37,7 +37,7 @@ Next we are going to install PHP 5.5 along with a host of useful packages (i.e. 
 Running the second command is useful if you wish to find other available packages.
 Finally, we run a couple of commands which use 'sed' to quickly alter highlighted configuration in PHP.
 
-{% highlight bash %}
+```bash
 $ yum --enablerepo=remi-php55,remi install -y \
     php php-fpm php-common php-cli php-opcache php-pecl-xdebug \
     php-pear php-mysqlnd php-pdo php-gd php-mbstring \
@@ -47,34 +47,34 @@ $ sed -i "s/^\;date\.timezone.*$/date\.timezone = \"Europe\/London\"/g" /etc/php
 $ sed -i "s/^\expose_php.*$/expose_php = Off/g" /etc/php.ini
 $ sed -i "s/^\upload_max_filesize.*$/upload_max_filesize = 10M/g" /etc/php.ini
 $ sed -i "s/^\post_max_size.*$/post_max_size = 10M/g" /etc/php.ini
-{% endhighlight %}
+```
 
 We are then tasked with configuring the previously installed PHP-FPM, along with adding it to run on start-up.
 If you wish to install Nginx you must also execute the last two commands, which correct the desired user/group settings used.
 
-{% highlight bash %}
+```bash
 $ chkconfig --levels 235 php-fpm on
 $ sed -i "s/^\listen.*$/listen = \/tmp\/php5-fpm.sock/g" /etc/php-fpm.d/www.conf
 # if you wish to use nginx, also execute
 $ sed -i "s/^\user.*$/user = nginx/g" /etc/php-fpm.d/www.conf
 $ sed -i "s/^\group.*$/group = nginx/g" /etc/php-fpm.d/www.conf
-{% endhighlight %}
+```
 
 ## Option 1: Nginx
 
 I am a huge fan of Nginx and would definitely recommend it over Apache even if just for its exceptional low-memory footprint.
 First we must add the YUM repository and then install/configure Nginx to run at start-up.
 
-{% highlight bash %}
+```bash
 $ rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
 $ yum install -y nginx
 $ chkconfig --levels 235 nginx on
-{% endhighlight %}
+```
 
 We can then replace the inital configuration file provided at '/etc/nginx/conf.d/default.conf' with the one below.
 This is a trivial configuration that should help you get up-and-running, I would recommend however, that you take a look at the great work [here](http://github.com/h5bp/server-configs-nginx) for more ideas.
 
-{% highlight nginx %}
+```nginx
 # /etc/nginx/conf.d/default.conf
 
 server {
@@ -91,33 +91,33 @@ server {
         fastcgi_param           SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 }
-{% endhighlight %}
+```
 
 ## Option 2: Apache
 
 Alternatively, you may prefer the extra modules and familiarity of Apache.
 Below we are simply installing the Apache package provided in the official repository, along with enabling it at start-up.
 
-{% highlight bash %}
+```bash
 $ yum install -y httpd
 $ chkconfig --levels 235 httpd on
-{% endhighlight %}
+```
 
 We have to go through one extra step to successfully get Apache to use PHP-FPM.
 To achieve this we must install the 'mod_fastcgi' module along with safely disabeling a couple of default configuration files.
 
-{% highlight bash %}
+```bash
 $ rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
 $ yum --enablerepo=rpmforge-extras install -y mod_fastcgi
 $ mv /etc/httpd/conf.d/php.conf /etc/httpd/conf.d/php.conf.old # disable mod_php
 $ mv /etc/httpd/conf.d/fastcgi.conf /etc/httpd/conf.d/fastcgi.conf.old
 $ mkdir /usr/lib/cgi-bin/
-{% endhighlight %}
+```
 
 We can then create a new file '/etc/httpd/conf.d/default.conf' with the contents below to get up-and-running.
 This configuration is very trivial, I would recommend that you take a look at the great work [here](http://github.com/h5bp/server-configs-apache) for more ideas.
 
-{% highlight conf %}
+```conf
 # /etc/httpd/conf.d/default.conf
 
 # FastCGI
@@ -143,24 +143,24 @@ NameVirtualHost *:80
         AllowOverride All
     </Directory>
 </VirtualHost>
-{% endhighlight %}
+```
 
 ## Web Directory
 
 I tend to store my web content under '/srv/www', and the example configuration files use this preference.
 If you have another preference remember to update the configuration files accordingly.
 
-{% highlight bash %}
+```bash
 $ mkdir /srv/www
 $ echo "<?php phpinfo();" > /srv/www/index.php
-{% endhighlight %}
+```
 
 ## Firewall
 
 It is very important to have a well configured firewall that meets you business-domain needs, the below configuration is a good start.
 I will not go through each line but this helps handle common script-kiddie attacks along with accepting activity on ports 80/443/22 (http, https and ssh).
 
-{% highlight bash %}
+```bash
 $ iptables -F
 $ iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP # null packets
 $ iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP # syn-flood attacks
@@ -175,25 +175,25 @@ $ iptables -P INPUT DROP # block other
 $ iptables-save | sudo tee /etc/sysconfig/iptables
 $ service iptables restart
 $ iptables -L -n # display rules
-{% endhighlight %}
+```
 
 ## Composer
 
 Who in the PHP world can now live without Composer?
 
-{% highlight bash %}
+```bash
 $ cd /tmp
 $ curl -sS https://getcomposer.org/installer | php
 $ mv composer.phar /usr/local/bin/composer
-{% endhighlight %}
+```
 
 ## 3, 2, 1, Go...
 
-{% highlight bash %}
+```bash
 $ /etc/init.d/php-fpm start
 $ /etc/init.d/httpd start # apache
 $ /etc/init.d/nginx start # nginx
-{% endhighlight %}
+```
 
-I hope that this brief overview has helped you get accustom with configuring a base installation, allowing you to take advantage of the flexiablity gains.
-I have purposely omitted detailed discusion on logging and advanced web-server configuration, as I feel they deserve their own posts and hope to fulfill this in the near future.
+I hope that this brief overview has helped you get accustom with configuring a base installation, allowing you to take advantage of the flexibility gains.
+I have purposely omitted detailed discussion on logging and advanced web-server configuration, as I feel they deserve their own posts and hope to fulfil this in the near future.

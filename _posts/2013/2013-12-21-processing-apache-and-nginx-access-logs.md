@@ -10,38 +10,38 @@ Both Apache and Nginx by default use the [combined](http://httpd.apache.org/docs
 Below are two different methods of accessing either an uncompressed single file or multiple compressed files (following the supplied wild-card pattern).
 <!--more-->
 
-{% highlight bash %}
+```bash
 $ cat access.log # uncompressed file
 $ zcat access.log-*.gz # compressed files i.e. access.log-20131221.gz
-{% endhighlight %}
+```
 
 ## Log Data to Information
 
 404 Request Responses
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk '($9 ~ /404/)' | awk '{ print $7 }' | sort | uniq -c | sort -rn | head -n 25
-{% endhighlight %}
+```
 
 Using 'awk' we are able to filter the access log entires down to only the ones that include the 404 status code.
 In this case we are then displaying the most requested pages of this type, in descending order.
 
 Request User Agents
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk -F\" '{ print $6 }' | sort | uniq -c | sort -frn | head -n 25
-{% endhighlight %}
+```
 
 The command above displays the top 25 user agents (browser, operating system) that have requested a resource from the web server.
 The 'awk' command in this instance uses a defined field separator of " to successfully parse the user agent string.
 
 Request IP Addresses
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk '{ print $1 }' | sort | uniq -c | sort -rn | head -n 25
 $ cat access.log | awk '{ print $1 }' | sort | uniq -c | sort -rn | head -n 25 | \
     awk '{ printf("%5d\t%-15s\t", $1, $2); system("geoiplookup " $2 " | cut -d \\: -f2 ") }'
-{% endhighlight %}
+```
 
 Above are two examples of displaying the top 25 IP addresses based on total requests.
 The second command uses the GeoIP package to include the country the IP address originates from.
@@ -49,42 +49,42 @@ This package can be installed on a CentOS setup using the [EPEL](https://fedorap
 
 Count Unique Visits
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk '{ print $1 }' | sort | uniq -c | wc -l
 # or today
 $ cat access.log | grep `date '+%e/%b/%G'` | awk '{ print $1 }' | sort | uniq -c | wc -l
 # or this month
 $ cat access.log | grep `date '+%b/%G'` | awk '{ print $1 }' | sort | uniq -c | wc -l
-{% endhighlight %}
+```
 
 The commands above will provide you with a total count of unique visits based on IP address.
 You are also able to run the log file through the 'grep' command before processing, to only include entries that have occurred today or this month.
 
 Ranked by Response Codes
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk '{ print $9 }' | sort | uniq -c | sort -rn
-{% endhighlight %}
+```
 
 This simple command is very useful to quickly observe the total counts based on returned response code.
 
 Most Popular URLS
 
-{% highlight bash %}
+```bash
 $ cat access.log | awk '{ print $7 }' | sort | uniq -c | sort -rn | head -n 25
-{% endhighlight %}
+```
 
 A trivial replacement for some Google Analytics statistics, reporting how many hits the top 25 resources have tallied.
 
 Real-time IP-Page Requests
 
-{% highlight bash %}
+```bash
 $ tailf access.log | awk '{ printf("%-15s\t%s\t%s\t%s\n", $1, $6, $9, $7) }'
 $ tailf access.log | awk '{
     "geoiplookup " $1 " | cut -d \\: -f2 " | getline geo
     printf("%-15s\t%s\t%s\t%-20s\t%s\n", $1, $6, $9, geo, $7);
   }'
-{% endhighlight %}
+```
 
 The final two commands are most likely my favorite as they provide me with real-time access information.
 These commands report on each IP address, request and response that have recently occurred on the server.

@@ -16,7 +16,7 @@ Using a combination of syntactic sugar and currying, the language is able to giv
 Below is a simple implementation of a partial application function in PHP, taking advantage of its first-class function and closure support.
 The solution I was able to come up is very similar to the one documented [here](http://allthingsphp.blogspot.co.uk/2012/02/currying-vs-partial-application.html), and will fortunately be more clearly expressed with the inclusion of [variadic function syntax](https://wiki.php.net/rfc/variadics) in 5.6.
 
-{% highlight php startinline %}
+```php
 function partial(/* $func, $args... */)
 {
     $args = func_get_args();
@@ -27,12 +27,12 @@ function partial(/* $func, $args... */)
         return call_user_func_array($func, array_merge($args, func_get_args()));
     };
 }
-{% endhighlight %}
+```
 
 Using the above implementation many very useful functions based on pre-existing function behavior can be created.
 The example below defines an addition function which with partial application can be used to produce increment and decrement functions.
 
-{% highlight php startinline %}
+```php
 function add($a, $b)
 {
     return $a + $b;
@@ -40,11 +40,11 @@ function add($a, $b)
 
 $inc = partial('add', 1);
 $dec = partial('add', -1);
-{% endhighlight %}
+```
 
 In a similar manner a multiplication function can be defined with double and half functions created from it with partial application.
 
-{% highlight php startinline %}
+```php
 function times($a, $b)
 {
     return $a * $b;
@@ -52,22 +52,22 @@ function times($a, $b)
 
 $double = partial('times', 2);
 $half = partial('times', .5);
-{% endhighlight %}
+```
 
 These four new methods can then be used in conjunction in the following contrived example.
 
-{% highlight php startinline %}
+```php
 $inc(4) + $half(10); // 10
 $dec(6) + $double(2.5); // 10
-{% endhighlight %}
+```
 
 The earlier discussed post also details another example were partial application can come in very useful, when using the date function.
 On a per-project basis I typically create functions which fill in the date format of the function, all of which can now be taken care of with the generalised partial function.
 
-{% highlight php startinline %}
+```php
 $rssFormat = partial('date', DATE_RSS);
 $rssFormat(1388534400); // Wed, 01 Jan 2014 00:00:00 +0000
-{% endhighlight %}
+```
 
 ## Resources
 

@@ -19,7 +19,7 @@ The 'merge' method which is the point of stack-overflow consideration in our exa
 The compiler is then able to parse these recursive method calls and run the described optimisation.
 In this case the Scala compiler does not require that an annotation be present as it can deduce this requirement, however for clarity I have included it.
 
-{% highlight scala %}
+```scala
 implicit def IntIntLessThan(x: Int, y: Int) = x < y
 
 def mergeSort[T](xs: List[T])(implicit pred: (T, T) => Boolean): List[T] = {
@@ -40,7 +40,7 @@ def mergeSort[T](xs: List[T])(implicit pred: (T, T) => Boolean): List[T] = {
 }
 
 println(mergeSort(List(4, 2, 1, 3)))
-{% endhighlight %}
+```
 
 A small example-driven inclusion that I have also made is in the use of an implicit method to provide the less-than predicate.
 Implicts are an extremely powerful feature that deserves its own post, simply put however, the compiler is able to 'implicitly' deduce that I wish to use this comparator method based on its type signature (Int, Int => Boolean).
@@ -54,7 +54,7 @@ What we can take advantage of is the implicit conversion that occurs with the ca
 Calling this operator creates a new 'Cons' object via the application 'cons.apply[A](hd: A, tl -> Stream[A]): Cons[A]', and due to the second argument being 'call-by-name', it does not get evaluated at this time on the stack.
 As all objects on the JVM are created on the much larger heap, we in essence are indirectly transferring this work.
 
-{% highlight scala %}
+```scala
 def mergeSort[T](pred: (T, T) => Boolean)(xs: Stream[T]): Stream[T] = {
     val m = xs.length / 2
     if (m == 0) xs
@@ -76,7 +76,7 @@ def numbers(remain: Int): Stream[Int] =
     else Stream.cons(util.Random.nextInt(100), numbers(remain - 1))
 
 println(mergeSort((x: Int, y: Int) => x < y)(numbers(4)).toList)
-{% endhighlight %}
+```
 
 I should note however, although the above example is very cratfy in its attempt to elimate a stack-overflow, it does off-course move this issue over to the heap.
 As a result it is recommended to use the first example (tail-recursive optimisations) and enjoy the ninja-esque skills of the second one.

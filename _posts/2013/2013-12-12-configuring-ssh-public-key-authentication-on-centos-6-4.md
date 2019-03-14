@@ -10,22 +10,22 @@ Enter public-key authentication, were instead you use asymmetric cryptography.
 The first thing to do is generate a key-pair on your client machine, you can optional provide a passphrase to unlock the private key if you so wish.
 <!--more-->
 
-{% highlight bash %}
+```bash
 $ ssh-keygen -q -t rsa -C "your@email.com"
-{% endhighlight %}
+```
 
 We now need to add the clients public-key to the list of authorised keys for the server's specifed user.
 
-{% highlight bash %}
+```bash
 $ cat ~/.ssh/id_rsa.pub | ssh user@hostname "cat >> ~/.ssh/authorized_keys"
-{% endhighlight %}
+```
 
 Once this has been successfully copied across we just need to enable the daemon to use the new form of authentication.
 This will be the last time you will have to authenticate via password.
 
-{% highlight bash %}
+```bash
 $ ssh user@hostname
 $ sudo sed -i "s/^\#RSAAuthentication.*$/RSAAuthentication yes/g" /etc/ssh/sshd_config
 $ sudo sed -i "s/^\#PubkeyAuthentication.*$/PubkeyAuthentication yes/g" /etc/ssh/sshd_config
 $ sudo /etc/init.d/sshd restart
-{% endhighlight %}
+```

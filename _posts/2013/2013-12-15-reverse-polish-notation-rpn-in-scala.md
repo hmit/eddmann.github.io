@@ -10,9 +10,9 @@ Popularised by its use in the [HP-10C](http://en.wikipedia.org/wiki/HP-10C_serie
 
 For simplification both discussed solutions use the partially-applied 'parse' function below, which simply is an alias to Java's 'parseDouble' method.
 
-{% highlight scala %}
+```scala
 def parse = java.lang.Double.parseDouble _
-{% endhighlight %}
+```
 
 ## Mutable Stack
 
@@ -22,7 +22,7 @@ Though this solution uses mutability (a big functional no-no), I was able to tak
 As addition and multiplication operations both have the symmetric property, I was able to ignore the stacks last-in-first-out (LIFO) nature in this case.
 However, in regard to the minus and divide operations, I was required to swap the parameter values around before evaluating and returning the result.
 
-{% highlight scala %}
+```scala
 def rpn(str: String) = {
 
     val ops = Map(
@@ -43,7 +43,7 @@ def rpn(str: String) = {
     stack.pop
 
 }
-{% endhighlight %}
+```
 
 ## Pattern-Matching
 
@@ -51,7 +51,7 @@ Following on from the above mutable approach I was able to implement a solution 
 In this instance I am instead doing a left-fold over the split string, then using pattern matching to evaluate each token and the current state of the stack (list).
 By this use of pattern matching I am similarly, in effect 'popping' off the last two operands when I encounter a operator token.
 
-{% highlight scala %}
+```scala
 def rpn(str: String) = {
 
     str.split(' ').toList.foldLeft(List[Double]())(
@@ -64,10 +64,10 @@ def rpn(str: String) = {
         }).head
 
 }
-{% endhighlight %}
+```
 
 Finally, both implementations when run with the following RPN string argument will return a double value result of 8.0.
 
-{% highlight scala %}
+```scala
 rpn("4 2 * 8 + 2 /") // 8.0
-{% endhighlight %}
+```

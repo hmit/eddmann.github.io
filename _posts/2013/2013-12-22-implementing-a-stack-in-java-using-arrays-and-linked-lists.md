@@ -14,12 +14,12 @@ Doing so will make you more aware of when this data-structure can be best used.
 The following examples solve the same problem, and as such I have created a simple interface that each implementation must fulfill.
 Contractual agreements like this are great when you do not want the implementation details to effect the API that is available, allowing the user to use them interchangeably.
 
-{% highlight java %}
+```java
 interface Stack<T> {
     Stack<T> push(T ele);
     T pop();
 }
-{% endhighlight %}
+```
 
 ## Array-based implementation
 
@@ -35,7 +35,7 @@ As resizing the array is a very costly act we want to do it as infrequently as p
 One point you can pick up from this example is maybe the overlooked initial capacity parameter you can initialise an [ArrayList](http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html) with.
 Implemented conceptional the same, doing so can increase performance greatly if you have an estimate (heuristics) on how large the list is going to grow.
 
-{% highlight java %}
+```java
 public class StackArray<T> implements Stack<T> {
 
     private T[] arr;
@@ -77,7 +77,7 @@ public class StackArray<T> implements Stack<T> {
     }
 
 }
-{% endhighlight %}
+```
 
 ## Linked-List implementation
 
@@ -91,7 +91,7 @@ No upfront memory costs result when using a Linked-List as you only consume the 
 However, the overhead of each node being an object instance should be taken into consideration.
 Another limitation of a Linked-List is the linear 'O(n)' traversal time, however, this is not an issue in this case as we are only concerned with the first (most recent) element.
 
-{% highlight java %}
+```java
 public class StackLinkedList<T> implements Stack<T> {
 
     private int total;
@@ -137,17 +137,17 @@ public class StackLinkedList<T> implements Stack<T> {
     }
 
 }
-{% endhighlight %}
+```
 
 ## Example Usage
 
 Below is an example showing the array implementation in action.
 As you can see I have declared the variable instance as the Stack interface type, doing so allows me to easily switch out the implementation if future requirements warrant it.
 
-{% highlight java %}
+```java
 Stack<String> greeting = new StackArray<>();
 
 greeting.push("!").push("World").push("Hello, ");
 
 System.out.println(greeting.pop() + greeting.pop() + greeting.pop()); // Hello, World!
-{% endhighlight %}
+```

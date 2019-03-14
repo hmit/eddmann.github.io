@@ -10,7 +10,7 @@ In the next couple of posts I wish to implement some of the common place data-st
 <!--more-->
 The first such data-structure I wish to discuss is the common place singly linear linked-list.
 
-{% highlight c %}
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -75,14 +75,14 @@ void list()
 
     printf("\n");
 }
-{% endhighlight %}
+```
 
 As you can see from the implementation above, both insertion and removal methods allow the user to specify if they wish to effect the head or tail.
 Surprisingly, it was not until the ISO-C99 standard that C got a native boolean data type (_Bool).
 The 'stdbool.h' header file defines library macros (true, false) which resolve to the _Bool type.
 With the above implementation we are also able to print out the contents of the full linked-list at that present time.
 
-{% highlight c %}
+```c
 int main()
 {
     for (int i = 1; i <= 10; i++)
@@ -95,14 +95,14 @@ int main()
 
     list(); // 8 7 6 1 2 3
 }
-{% endhighlight %}
+```
 
 The above method bootstraps the implementation together, providing us with an example of inserting items initially at the tail and then at the head.
 We then delete four items from the list, in a similar manner to the insertion step, deleting half from the tail and the other half from the head.
 
-{% highlight bash %}
+```bash
 $ gcc linkedlist.c -o linkedlist && ./linkedlist
-{% endhighlight %}
+```
 
 We can then use the command above, which simply compiles the file and subsequently executes it.
 

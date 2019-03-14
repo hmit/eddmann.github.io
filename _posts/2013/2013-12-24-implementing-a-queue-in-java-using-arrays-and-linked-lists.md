@@ -14,12 +14,12 @@ Discussed in the post on stacks, you are more than likely never going to have to
 The following examples solve the same problem, and as such I have again created a simple interface that each implementation must fulfill.
 Using this approach removes any worry from the user about specific implementation details and permits switching to alternative conforming instances later on, if the use-case warrants it.
 
-{% highlight java %}
+```java
 interface Queue<T> {
     Queue<T> enqueue(T ele);
     T dequeue();
 }
-{% endhighlight %}
+```
 
 ## Array-based implementation
 
@@ -35,7 +35,7 @@ Finally, to remove (dequeue) the first element from the collection, the 'first' 
 This items slot is then nulled to stop [loitering](http://stackoverflow.com/questions/18109915/java-loitering-and-garbage-collection) and the 'wrap-around' technique for the 'next' index is put into affect.
 Array maintenance can then be carried out, cutting the array in half if the queue now only contains a quarter of its previous size.
 
-{% highlight java %}
+```java
 public class QueueArray<T> implements Queue<T> {
 
     private T[] arr;
@@ -85,7 +85,7 @@ public class QueueArray<T> implements Queue<T> {
     }
 
 }
-{% endhighlight %}
+```
 
 ## Linked-List implementation
 
@@ -99,7 +99,7 @@ However, in the case that there are already items present, we simply set the pre
 Removing (dequeuing) elements from the collection is also a trivial task, simply returning the node referenced from the 'first' variable.
 This reference is then updated to the returned nodes 'next' reference, and a simple check to clear the last reference if the collection is now empty takes place.
 
-{% highlight java %}
+```java
 public class QueueLinkedList<T> implements Queue<T> {
 
     private int total;
@@ -147,20 +147,20 @@ public class QueueLinkedList<T> implements Queue<T> {
     }
 
 }
-{% endhighlight %}
+```
 
 ## Example Usage
 
 Below is an example showing the linked-list implementation in action.
 Similar to the stack examples, declaring the instance variable as the queue interface allows for a simple switch to another implementation if future requirements warrant it.
 
-{% highlight java %}
+```java
 Queue<String> greeting  = new QueueLinkedList<>();
 
 greeting.enqueue("Hello").enqueue(", ").enqueue("World!");
 
 System.out.println(greeting.dequeue() + greeting.dequeue() + greeting.dequeue());
-{% endhighlight %}
+```
 
 ## Resources
 

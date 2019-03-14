@@ -14,7 +14,7 @@ So in the end I decided to spend 45 mins last night implementing my own solution
 
 Using the same request method that is present in the Twitter Fetcher project (major kudos) I request the widget response, and then parse the returned tweets into objects for your callback delights.
 
-{% highlight javascript %}
+```javascript
 var TweetFetcher = function(id)
 {
     this.id = id;
@@ -83,14 +83,14 @@ TweetFetcher.prototype.parse = function(res)
 
     this.cb(output);
 };
-{% endhighlight %}
+```
 
 To parse the response I decided to use 'querySelector/querySelectorAll' which takes away alot of the tedious DOM querying.
 This script has been tested and working on IE8 but anything older in the IE family sadly does not [support](http://caniuse.com/queryselector) 'querySelector'.
 To use the fetcher all you need to do is simply create a new instance (supplying the widget id), then call 'fetch' with a callback of work to do with the tweets once returned and optionally a tweet limit (max of 20).
 Below is an example of the one used on this site.
 
-{% highlight javascript %}
+```javascript
 var tf = new TweetFetcher('354188847791366144');
 
 tf.fetch(function(tweets)
@@ -104,11 +104,11 @@ tf.fetch(function(tweets)
     }
     document.getElementById('tweets').innerHTML = output;
 }, 2);
-{% endhighlight %}
+```
 
 When the response has been parsed the supplied callback is given an array of processed tweets, each providing the following information.
 
-{% highlight javascript %}
+```javascript
 {
     id: '408662284337422337',
     author: {
@@ -123,6 +123,6 @@ When the response has been parsed the supplied callback is given an array of pro
     retweets: 2,
     content: 'Sample Tweet!'
 }
-{% endhighlight %}
+```
 
 I have provided a [Gist](http://gist.github.com/eddmann/7812893) of the above script for anyone wishing to make improvements/updates.

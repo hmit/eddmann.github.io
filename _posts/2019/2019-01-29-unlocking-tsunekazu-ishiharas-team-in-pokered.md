@@ -11,7 +11,7 @@ In this post I will document making this function accessible by [talking to Mom]
 
 As most of the assembly code was already present to add this behaviour, all that was required was to update [`scripts/RedsHouse1F.asm`](https://github.com/eddmann/pokered/commit/3450a335207c79018c4c157139ad5a6ac2755081#diff-0e46c8f2965b519c43baed3692896c7b) like so.
 
-{% highlight nasm %}
+```diff
 RedsHouse1FText1: ; Mom
   TX_ASM
   ld a, [wd72e]
@@ -21,12 +21,12 @@ RedsHouse1FText1: ; Mom
   call PrintText
 + callba SetIshiharaTeam
   jr .done
-{% endhighlight %}
+```
 
 So now, instead of healing any present Pokémon, Mom will instead provide us with Ishihara's team.
 To document this change to the player I updated the text that was presented when talking to Mom within [`text/maps/RedsHouse1F.asm`](https://github.com/eddmann/pokered/commit/3450a335207c79018c4c157139ad5a6ac2755081#diff-b1750b171a232f88acb32643546f5ed3).
 
-{% highlight nasm %}
+```diff
 _MomWakeUpText::
   text "MOM: Right."
   line "All boys leave"
@@ -40,7 +40,7 @@ _MomWakeUpText::
 + line "favourite #MON"
 + cont ""
   done
-{% endhighlight %}
+```
 
 After compiling and booting up the ROM, we can now see the new behaviour in action. 🎉
 

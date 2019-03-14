@@ -19,21 +19,21 @@ The [pokered](https://github.com/pret/pokered) Git repository is well documented
 However, being an advocate of Docker I wished to take it a step further an Dockerise this process.
 To do this I created the `Dockerfile` below, which uses a small [Debian base image](https://github.com/bitnami/minideb) to install all the required dependencies with.
 
-{% highlight docker %}
+```docker
 FROM bitnami/minideb:stretch
 RUN install_packages make git gcc byacc flex pkg-config libpng-dev ca-certificates
 RUN git clone https://github.com/rednex/rgbds /opt/rgbds && make -C /opt/rgbds install && rm -fr /opt/rgbds
 RUN mkdir /opt/src
 WORKDIR /opt/src
 CMD ["make", "all"]
-{% endhighlight %}
+```
 
 From here I then compiled and pushed [this image](https://hub.docker.com/r/eddmann/pokered) to Docker Hub and created a small executable `docker-make` script within the root of the repository.
 
-{% highlight bash %}
+```bash
 #!/bin/bash
 docker run -v $(pwd):/opt/src eddmann/pokered make $@
-{% endhighlight %}
+```
 
 This allowed me to seamlessly run all provided `make` targets within the Docker container like so `./docker-make all`.
 Once complete, two new build artifacts were now present in the root of the repository - `pokered.gbc` and `pokeblue.gbc`.
@@ -50,7 +50,7 @@ I started to review the code-base to see if there was a way of taking advantage 
 It turns out that the game had an unused [debug mode](https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Debug_Functions#Debug_Mode) that was left in, which provided one part of this behaviour.
 As such I was able to tweak [`engine/battle/core.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-126f3527215b40b1dc53ffe1ff45b479) to prevent wild Pokémon encounters if the B button was pressed.
 
-{% highlight nasm %}
+```diff
 DetermineWildOpponent:
 - ld a, [wd732]
 - bit 1, a
@@ -59,7 +59,7 @@ DetermineWildOpponent:
 - bit 1, a ; B button pressed?
 + and B_BUTTON
   ret nz
-{% endhighlight %}
+```
 
 This tweak simply removes the check for if the debug mode is enabled and short-circuits the action if the B button is pressed.
 
@@ -68,7 +68,7 @@ This tweak simply removes the check for if the debug mode is enabled and short-c
 Following this, I now hoped to follow a similar pattern in temporarily preventing trainer battle encounters.
 I was able to achieve this by making some minor modifications to [`home.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-33f8ea117b558305b57c03b757e4ef64).
 
-{% highlight nasm %}
+```diff
 CheckFightingMapTrainers::
 + ld a, [hJoyHeld]
 + and B_BUTTON
@@ -83,7 +83,7 @@ CheckFightingMapTrainers::
   ld [wSpriteIndex], a
   ld [wTrainerHeaderFlagBit], a
   ret
-{% endhighlight %}
+```
 
 In a similar manor to how we prevented wild Pokémon encounters, if the B button is pressed we jump to `.noFight`, skipping the `CheckForEngagingTrainers` call.
 Once compiled, I was able to experiment with these two changes and found them to be very interesting additions to game play.
@@ -93,7 +93,7 @@ Once compiled, I was able to experiment with these two changes and found them to
 I then thought wouldn't it be cool to accommodate for a similar 'walk through walls' glitch behaviour that you see in certain [speed runs](https://www.youtube.com/watch?v=5naL4X1vUbE).
 As such I delved back into the code-base and made a small modification to [`home/overworld.asm`](https://github.com/eddmann/pokered/commit/e2d6662bc13348234d58a262e9d6faef0a2507de#diff-3dcdb47cbd60e627ff3c82d83193112c) which provided me with this capability.
 
-{% highlight nasm %}
+```diff
 .noDirectionChange
   ld a, [wPlayerDirection] ; current direction
   ld [wPlayerMovingDirection], a ; save direction
@@ -106,7 +106,7 @@ As such I delved back into the code-base and made a small modification to [`home
   ld a, [wWalkBikeSurfState]
   cp $02 ; surfing
   jr z, .surfing
-{% endhighlight %}
+```
 
 After another compile I was now able to not only prevent wild Pokémon and trainer battle encounters, but also 'walk through walls' when desired.
 You can see a small clip below of how game play is altered when the 'Super B' button is pressed.

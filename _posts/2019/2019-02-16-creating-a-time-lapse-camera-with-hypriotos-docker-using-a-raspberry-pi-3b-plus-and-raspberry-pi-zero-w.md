@@ -42,7 +42,7 @@ The application is a simple script which uses `setInterval` to block and call th
 Photos are organised into a deterministic `/year/month/day/hour/` directory structure, and each photos follows a `year_month_day_hour_minutes_seconds.jpg` naming convention.
 The actual act of taking the photo (with desired options) is delegated to the [`raspistill`](https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspistill.md) command-line tool which is provided by the Raspberry Pi organisation.
 
-{% highlight js %}
+```js
 const { mkdirSync } = require("fs");
 const { execSync } = require("child_process");
 
@@ -93,17 +93,17 @@ const options = process.env.OPTIONS || "";
 console.log(`Delay: ${delay}s, Path: '${basePath}', Options: '${options}'`);
 
 setInterval(shoot, toMilliseconds(delay), basePath, options);
-{% endhighlight %}
+```
 
 This script was then packaged into a Docker image using the following [`Dockerfile`](https://github.com/eddmann/pi-timelapse/blob/master/Dockerfile) file.
 
-{% highlight dockerfile %}
+```docker
 FROM balenalib/raspberry-pi-debian-node:11.3.0-stretch-run
 RUN apt-get update -y && apt-get install libraspberrypi-bin -y
 COPY timelapse.js /var/timelapse.js
 VOLUME /var/photos
 CMD ["node", "/var/timelapse.js"]
-{% endhighlight %}
+```
 
 The image ensures that the [user-land](https://github.com/raspberrypi/userland) Raspberry Pi libraries are available (giving us access to `raspistill`) and provides us with a volume we can mount to our host OS - so as to persist photos taken regardless of the current container instance going away.
 
@@ -116,7 +116,7 @@ It also includes the [cloud-init](https://cloudinit.readthedocs.io/en/latest/) l
 
 In regards to the two time-lapse devices I used the following cloud-config, specified in [`user-data.yml`](https://github.com/eddmann/pi-timelapse/blob/master/hypriot/user-data.yml).
 
-{% highlight yaml %}
+```yaml
 #cloud-config
 
 hostname: timelapse
@@ -171,12 +171,12 @@ runcmd:
       "--env", 'OPTIONS=""',
       "eddmann/pi-timelapse"
     ]
-{% endhighlight %}
+```
 
 This provisions the given instance with the desired user account, WiFi access and starts the Docker container instance with the provided options.
 As well as this definition I was also required to ensure that the camera module was enabled, to do this I created a [`boot-config.txt`](https://github.com/eddmann/pi-timelapse/blob/master/hypriot/boot-config.txt) file like so.
 
-{% highlight ini %}
+```ini
 hdmi_force_hotplug=1
 enable_uart=0
 
@@ -187,18 +187,18 @@ gpu_mem=128
 
 # Enable audio (added by raspberrypi-sys-mods)
 dtparam=audio=on
-{% endhighlight %}
+```
 
 With these two files now defined I was able to use the [flash script](https://github.com/hypriot/flash) provided by Hypriot to easily write the given image to two separate MicroSD cards.
 The only varying factor per image was the desired hostname, and as such I was able to supply this whilst invoking the flash script.
 
-{% highlight bash %}
+```bash
 flash \
   --hostname timelapse \
   --userdata user-data.yml \
   --bootconf boot-config.txt \
   https://github.com/hypriot/image-builder-rpi/releases/download/v1.10.0-rc2/hypriotos-rpi-v1.10.0-rc2.img.zip
-{% endhighlight %}
+```
 
 With both the Docker and Raspberry Pi HypriotOS images now written I was able to move on to actually experimenting with the devices. 📸
 

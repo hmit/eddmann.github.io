@@ -17,7 +17,7 @@ Sure you can let your IDE do all the boilerplate insertion, or maybe we should a
 The trait below however, dynamically sets and gets instance properties based on the common place method naming pattern.
 For example, 'setFirstName' will set the 'firstName' property, where as 'getFirstName' will return the instances value.
 
-{% highlight php startinline %}
+```php
 trait Accessors {
 
     public function __call($method, $args)
@@ -43,14 +43,14 @@ trait Accessors {
     }
 
 }
-{% endhighlight %}
+```
 
 Looking at the code above you will notice that we use PHP's '\__call' magic method to see if the users invoked method is of interest to us.
 To keep control of this traits 'magic', the call only looks for properties that exist within the class that the trait has been used in.
 You are however able to replace '\__CLASS__' with '$this' to provide the entire classes properties with these capabilities, but I found this restriction beneficial when refactoring the code-base.
 Below is an example use-case for including this trait.
 
-{% highlight php startinline %}
+```php
 class User {
     use Accessors;
     private $name, $age;
@@ -61,14 +61,14 @@ $user->setName('Joe Bloggs');
 $user->setAge(24);
 
 sprintf("Name: %s, Age: %s\n", $user->getName(), $user->getAge()); // Name: Joe Bloggs, Age: 24
-{% endhighlight %}
+```
 
 ## Singleton
 
 Another trait that I have found very useful in the initial stages of development is for implementing the [Singleton pattern](http://en.wikipedia.org/wiki/Singleton_pattern).
 Below is an example implementation which on the first 'getInstance' invocation creates a class instance with the provided arguments.
 
-{% highlight php startinline %}
+```php
 trait Singleton {
 
     protected static $instance;
@@ -88,12 +88,12 @@ trait Singleton {
     final private function __wakeup() { }
 
 }
-{% endhighlight %}
+```
 
 The code snippet above uses the [ReflectionClass](http://www.php.net/manual/en/class.reflectionclass.php) provided by PHP to enable classes it is incorporated into still define a unique constructor method.
 Below is an example that highlights the trait in action.
 
-{% highlight php startinline %}
+```php
 class Logger {
     use Singleton;
 
@@ -114,4 +114,4 @@ class Logger {
 $logger = Logger::getInstance(time());
 
 $logger->getInitTime(); // 1390901816
-{% endhighlight %}
+```

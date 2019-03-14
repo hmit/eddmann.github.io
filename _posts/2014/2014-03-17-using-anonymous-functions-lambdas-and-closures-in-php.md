@@ -13,7 +13,7 @@ Both do not depend on the other on an implementation level, however, you typical
 <!--more-->
 Below is an example of a trivial addition lambda and use-case.
 
-{% highlight php startinline %}
+```php
 $add = function($a, $b)
 {
     return $a + $b;
@@ -22,7 +22,7 @@ $add = function($a, $b)
 get_class($add); // Closure
 
 $add(1, 2); // 3
-{% endhighlight %}
+```
 
 Upon inspection of the resulting instances class type it may look incorrect.
 However, in PHP it can be a little confusing to disambiguate between the differences of lambdas and closures, as both create an object of the type 'Closure'.
@@ -30,7 +30,7 @@ Initially this was an implementation detail that could change in future releases
 Below is an example of using a Closure to implement increment functionality.
 Take notice of the inclusion of the 'use' keyword which allows us to disambiguate between the two concepts in code.
 
-{% highlight php startinline %}
+```php
 function inc($step = 1)
 {
     $inc = 0;
@@ -46,7 +46,7 @@ $inc = inc();
 get_class($inc); // Closure
 
 $inc(); // 1
-{% endhighlight %}
+```
 
 In the above case we create a 'regular' function which is supplied with the desired incremental step.
 When called, a new closure is returned which keeps a referential hold on the '$inc' value and specified step.
@@ -60,7 +60,7 @@ Combined, the two provide you with the ability to allow clients to easily extend
 So as to provide a real-life use case I have abstracted out the dynamic method implementation into a trait that can then be reused.
 Simplify explained the following example allows a user to register a lambda/closure with the specified instance, which is invoked if no concrete method of the same name exists within the class.
 
-{% highlight php startinline %}
+```php
 trait DynamicMethod {
 
     private $methods = [];
@@ -80,13 +80,13 @@ trait DynamicMethod {
     }
 
 }
-{% endhighlight %}
+```
 
 The use of object binding ('bindTo') allows us (similar to JavaScript) to give the function a context, making sure '$this' and 'static' access the correct environment.
 Below is the example validation library that uses the trait above, allowing the client to expand the rules available on an instance basis (works well with a singleton IoC).
 Note the used validation 'isRuleName' pattern, and ability to validate the negation of a specified rule.
 
-{% highlight php startinline %}
+```php
 class Validate {
     use DynamicMethod;
 
@@ -156,14 +156,14 @@ $v = new Validate;
 $v->check('1234')
     ->is('present', 'number', '!alpha')
     ->valid(); // bool(true)
-{% endhighlight %}
+```
 
 The library above provides a very minimalist set of validation rules that any real-world use-case would soon demand more from.
 Typically, the OO hat would come on, and you would continue to extend the class definition with your own custom validaters.
 However, with the inclusion of the 'DynamicMethod' trait we are able to simply extend the functionality through use of functions.
 Below shows an example of creating email validation functionality by way of registering a lambda with the instance.
 
-{% highlight php startinline %}
+```php
 $v->register('isEmail', function()
 {
     return filter_var($this->subject, FILTER_VALIDATE_EMAIL);
@@ -172,13 +172,13 @@ $v->register('isEmail', function()
 $v->check('joe@bloggs.com')
     ->is('present', 'email', '!number')
     ->valid(); // bool(true)
-{% endhighlight %}
+```
 
 As you can see, we are able to access the instance variables/environment in a similar manner to methods that are defined in the class itself.
 We are also able to run the validation check in a similar manner too.
 We are then able to expand on this example by using a closure which uses the current states '$domains' array to not only run the previous check but also make sure that the domain is present in a specified white-list.
 
-{% highlight php startinline %}
+```php
 $domains = [ 'bloggs.com', 'bloggs.co.uk' ];
 
 $v->register('isPermittedEmail', function() use ($domains)
@@ -195,6 +195,6 @@ $v->register('isPermittedEmail', function() use ($domains)
 $v->check('joe@bloggs.co.uk')
     ->is('present', 'permitted_email')
     ->valid(); // bool(true)
-{% endhighlight %}
+```
 
 Looking at the example library above I hope that you are able to notice some of the strengths that come from taking advantage of these concepts.

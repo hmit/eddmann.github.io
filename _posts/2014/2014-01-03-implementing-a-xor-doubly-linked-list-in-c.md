@@ -16,7 +16,7 @@ From previous posts you are aware that a doubly linked-list stores items with po
 This allows for traversal both forwards and backwards, at the expense of having to store two pointers per element.
 Through the magic of the bitwise XOR operation however, we are able to store each nodes previous and next pointers in the memory allocated to just one.
 
-{% highlight c %}
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
     list(); // 8 7 6 1 2 3
 }
-{% endhighlight %}
+```
 
 Firstly, I would like to credit [this](http://www.geeksforgeeks.org/xor-linked-list-a-memory-efficient-doubly-linked-list-set-2/) post and [this](http://stackoverflow.com/a/3532455) StackOverflow answer, which helped shape my implementation.
 Since in C we are unable to perform XOR operations on pointers directly, we must first convert them to integers using the 'uintptr_t' data type and then cast back, which can be seen in the 'xor' function.

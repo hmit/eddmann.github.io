@@ -9,7 +9,7 @@ In a functional style you are able to compose a desired application from many di
 The benefits of this approach can be clearly seen in the contrived example depicted below, which is based on my previous [Flask example](/posts/using-basic-auth-and-decorators-in-pythons-flask/).
 <!--more-->
 
-{% highlight python %}
+```python
 class Auth():
 
     def __init__(self, app):
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except KeyboardInterrupt:
         print('Goodbye!')
-{% endhighlight %}
+```
 
 As you can see we are able to secure a specified WSGI application with the provided 'Auth' middleware.
 The advantages of using this loosely coupled approach allows us to easily replace the authentication implementation with an alternative (i.e. OAuth) in future builds, without alteration to encapsulated applications.

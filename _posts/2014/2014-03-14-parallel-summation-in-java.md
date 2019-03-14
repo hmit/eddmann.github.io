@@ -11,7 +11,7 @@ As addition is an associative operation it makes no difference to the end result
 <!--more-->
 Below is an example implementation which splits the summation of a sequence of numbers into (close to) equal collections, each being processed in parallel within their own thread.
 
-{% highlight java %}
+```java
 public class Summation extends Thread {
 
     private int[] arr;
@@ -83,7 +83,7 @@ public class Summation extends Thread {
     }
 
 }
-{% endhighlight %}
+```
 
 Looking at the implementation above you will notice that I have taken advantage of static functionality to combine both the sum and thread instances required to complete the task.
 Calling 'parallelSum' with a single argument (being the specified array), the system is queried on how many available processing cores are present.
@@ -93,7 +93,7 @@ These are then started and subsequently joined into the main thread for the fina
 So as to see the benefits of parallelising such an operation, an example benchmark has been provided below.
 The implementation is provided in this case with 100,000,000 random integers between 1 and 100, and timed on its performance to run as both a single and parallel operation.
 
-{% highlight java %}
+```java
 import java.util.Random;
 
 public static void main(String[] args)
@@ -118,7 +118,7 @@ public static void main(String[] args)
 
     System.out.println("Parallel: " + (System.currentTimeMillis() - start)); // Parallel: 25
 }
-{% endhighlight %}
+```
 
 Looking at the results above, you will see that using the parallelised approach provides us with noticeable speed gains.
 An interesting observation I made when running the benchmark was that the speed increases after splitting the subject operation into 2 threads did not significantly alter the time taken.

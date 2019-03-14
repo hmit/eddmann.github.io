@@ -15,26 +15,26 @@ Once this has been setup, we will then move on to creating a simple 'Hello World
 The first step we need to take is to install all the prerequisite development tools (automake, autoconf etc.) required to compile PHP from source.
 We can do this simply by running the following commands within a shell instance.
 
-{% highlight bash %}
+```bash
 $ sed -i "s/^\exclude.*$/exclude=/g" /etc/yum.conf # allow kernel-devel package.
 $ yum groupinstall -y 'Development Tools'
-{% endhighlight %}
+```
 
 With these tools now successfully available to us we can now pull-down the PHP source code and checkout the desired version.
 
-{% highlight bash %}
+```bash
 $ git clone http://git.php.net/repository/php-src.git
 $ git checkout PHP-5.5
-{% endhighlight %}
+```
 
 The final step is to configure and compile the code-base, specifying where you wish the installed binary files to be located.
 As this build is simply for testing purposes I have decided to compile as bare-bones installation as possible, whilst still taking into consideration development requirements (i.e. debugging).
 
-{% highlight bash %}
+```bash
 $ ./buildconf
 $ ./configure --prefix=$HOME/php --disable-cgi --disable-all --enable-debug --enable-maintainer-zts
 $ make && make install
-{% endhighlight %}
+```
 
 ## Creating the Extension
 
@@ -46,7 +46,7 @@ The extension we will be creating will provide the user with two functions, whic
 
 So as to provide you with some context for what this extension is trying to achieve, the equivalent PHP code has been provided below.
 
-{% highlight php startinline %}
+```php
 function hello_world()
 {
     return "Hello, World!";
@@ -60,12 +60,12 @@ function hello($name, $format = true)
 
     return "Hello, " . $name . "!";
 }
-{% endhighlight %}
+```
 
 The first file that is required to successfully compile the new extension is the 'config.m4' file, used when running 'phpize'.
 This file defines where the extension is located and how it can be enabled.
 
-{% highlight bash %}
+```bash
 PHP_ARG_ENABLE(hello, whether to enable hello support,
 [ --enable-hello   Enable hello support])
 
@@ -73,11 +73,11 @@ if test "$PHP_HELLO" = "yes"; then
     AC_DEFINE(HAVE_HELLO, 1, [Whether you have hello])
     PHP_NEW_EXTENSION(hello, hello.c, $ext_shared)
 fi
-{% endhighlight %}
+```
 
 We are then able to provide the extension with an implementation using the ('hello.c') example below.
 
-{% highlight c %}
+```c
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -150,7 +150,7 @@ PHP_FUNCTION(hello)
 
     return;
 }
-{% endhighlight %}
+```
 
 Looking at the example above you will notice that there is far more boilerplate work required to initially setup and define the functions supplied.
 An interesting section I would like to draw your attention to is the 'zend_parse_parameters' function call, which supplies the function with the users provided string name and optional format boolean.
@@ -161,19 +161,19 @@ With the implementation now in place we are able to build and test the new exten
 We must first run 'phpize' to create the necessary build scripts, notice that I am specifying the full path to where I installed the compiled PHP binaries.
 In a similar manner we must also configure the build, supplying the full path to the 'php-config' application.
 
-{% highlight bash %}
+```bash
 $ $HOME/php/bin/phpize
 $ ./configure --with-php-config=$HOME/php/bin/php-config
 $ make && make install
-{% endhighlight %}
+```
 
 We can now test the extension is working correctly, by running the CLI PHP binary with the new extension specified.
 
-{% highlight bash %}
+```bash
 $ $HOME/php/bin/php -dextension=hello.so -r "echo hello_world();"       # Hello, World!
 $ $HOME/php/bin/php -dextension=hello.so -r "echo hello('JoE');"        # Hello, Joe!
 $ $HOME/php/bin/php -dextension=hello.so -r "echo hello('JoE', false);" # Hello, JoE!
-{% endhighlight %}
+```
 
 ## Resources
 

@@ -19,32 +19,32 @@ First we are required to create a private key to sign the certificate that will 
 I have decided to use strong encryption (4096 bits, this can be lowered) and make the certificate valid for a year from creation.
 So as to allow the command to run in non-interactive mode I have supplied the certificate details that are required using the 'subj' option.
 
-{% highlight bash %}
+```bash
 $ openssl req -newkey rsa:4096 -days 365 -nodes -x509 \
     -subj "/C=GB/ST=London/L=Fulham/O=Local/OU=Development/CN=local.dev/emailAddress=email@local.dev" \
     -keyout local.dev.key \
     -out local.dev.crt
-{% endhighlight %}
+```
 
 We can now move the certificate and private key to the desired location and tighten up file permissions on the two files.
 
-{% highlight bash %}
+```bash
 $ cp local.dev.crt /etc/ssl/certs/
 $ cp local.dev.key /etc/ssl/private/
 $ chmod 600 /etc/ssl/certs/local.dev.crt /etc/ssl/private/local.dev.key
-{% endhighlight %}
+```
 
 ## Apache Configuration
 
 Now that we have generated the private key and certificate we must next make sure that the SSL module is present and enabled in the Apache installation.
 
-{% highlight bash %}
+```bash
 $ yum install mod_ssl
-{% endhighlight %}
+```
 
 With the prerequisites out of the way we are now able to direct access through port 443 (HTTPS) to use the generated certificate.
 
-{% highlight conf %}
+```conf
 <VirtualHost *:443>
 
     SSLEngine On
@@ -54,11 +54,11 @@ With the prerequisites out of the way we are now able to direct access through p
     # ...
 
 </VirtualHost>
-{% endhighlight %}
+```
 
 Optional, we can also force all traffic sent and received be over HTTPS by redirecting HTTP requests to use the secure connection.
 
-{% highlight conf %}
+```conf
 <VirtualHost *:80>
 
    Redirect permanent / https://www.example.com/
@@ -66,13 +66,13 @@ Optional, we can also force all traffic sent and received be over HTTPS by redir
    # ...
 
 </VirtualHost>
-{% endhighlight %}
+```
 
 ## Nginx Configuration
 
 With a similar process as the Apache configuration we can configure Nginx to use the generated certificate when accessed over port 443.
 
-{% highlight nginx %}
+```nginx
 server {
 
     listen 443;
@@ -84,11 +84,11 @@ server {
     # ...
 
 }
-{% endhighlight %}
+```
 
 Optional, if you wish all traffic to be transported through HTTPS we can setup a permanent redirect on port 80.
 
-{% highlight nginx %}
+```nginx
 server {
 
     listen 80;
@@ -96,4 +96,4 @@ server {
     return 301 https://$host$request_uri;
 
 }
-{% endhighlight %}
+```

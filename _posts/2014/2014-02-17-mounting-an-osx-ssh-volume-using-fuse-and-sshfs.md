@@ -16,14 +16,14 @@ With both FUSE for OSX and SSHFS installed, you can simply add a new mounted vol
 An issue that you have surely encountered is OSX's love of polluting directories with .DS_Store files.
 We can disable this however, on a mount-by-mount basis by including the 'noappledouble' option.
 
-{% highlight bash %}
+```bash
 $ mkdir ~/example
 $ sshfs user@host:/example ~/example -oauto_cache,reconnect,defer_permissions,negative_vncache,noappledouble,volname=Example
-{% endhighlight %}
+```
 
 Looking at the example command above you will notice that we must first create the directory ('example') we wish to mount the remote filesystem to.
 Finally, once we are done with the volume we can by unmount it using the command below.
 
-{% highlight bash %}
+```bash
 $ umount ~/example
-{% endhighlight %}
+```

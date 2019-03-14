@@ -20,18 +20,18 @@ The only catch being, instead of using high-level commands such as [git-add](htt
 The first step is to store a blob object containing the contents of the 'foo.txt' file in the data-store - the hash of which is generated based on the contents and size of the file (or std-in) supplied.
 In the case of this example we will use std-in, and not only query Git for the generated hash, but also persist the blob into the object graph.
 
-{% highlight bash %}
+```bash
 $ echo 'Hello, world' | git hash-object --stdin -w
 a5c19667710254f835085b99726e523457150e03
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ tree .git/objects/
 .git/objects/
 | |____
 | | |____a5
 | | | |____c19667710254f835085b99726e523457150e03
-{% endhighlight %}
+```
 
 You will notice, if you are following along, that the resulting hash for this blob will be identical to the one above.
 That is one of Git's ingenious strengths, identical files are only ever stored once, regardless of where they appear in the history graph.
@@ -39,15 +39,15 @@ That is one of Git's ingenious strengths, identical files are only ever stored o
 The next step is to add the blob (via its hash key) to the index (staging area), specifying the file permissions and directory/name you wish to associate it with.
 We can then write this tree object out to the file-store, being returned its commuted hash.
 
-{% highlight bash %}
+```bash
 $ git update-index --add --cacheinfo 100644 a5c19667710254f835085b99726e523457150e03 foo.txt
 $ git write-tree
 0906930f06d75609ca186359a6cee2c9623bf99a
 $ git cat-file -p 0906930f06d75609ca186359a6cee2c9623bf99a
 100644 blob a5c19667710254f835085b99726e523457150e03    foo.txt
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ tree .git/objects/
 .git/objects/
 | |____
@@ -55,13 +55,13 @@ $ tree .git/objects/
 | | | |____06930f06d75609ca186359a6cee2c9623bf99a
 | | |____a5
 | | | |____c19667710254f835085b99726e523457150e03
-{% endhighlight %}
+```
 
 The pending index is stored in a file called 'index' until it is then persisted into the store.
 Tree objects store a combination of blob objects with file attributes such as the 'foo.txt' filename, along with other tree objects for subsequent directories.
 We are now ready to associate this generated tree with a commit object.
 
-{% highlight bash %}
+```bash
 $ git commit-tree 0906930f06d75609ca186359a6cee2c9623bf99a -m "First commit"
 e5446fb51f77fd526f56b7f58ac328c5db954dc6
 $ git cat-file -p e5446fb51f77fd526f56b7f58ac328c5db954dc6
@@ -70,9 +70,9 @@ author Edd Mann <the@eddmann.com> 1419674305 +0000
 committer Edd Mann <the@eddmann.com> 1419674305 +0000
 
 First commit
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ tree .git/objects/
 .git/objects/
 | |____
@@ -82,39 +82,39 @@ $ tree .git/objects/
 | | | |____c19667710254f835085b99726e523457150e03
 | | |____e5
 | | | |____446fb51f77fd526f56b7f58ac328c5db954dc6
-{% endhighlight %}
+```
 
 This commit hash will differ from the one you generate as factors such as name/email and current timestamp play a role in its generation.
 With this commit now persisted in the store we can update the repositories 'HEAD' reference to point to the generated hash commit.
 
-{% highlight bash %}
+```bash
 $ git update-ref HEAD e5446fb51f77fd526f56b7f58ac328c5db954dc6
 $ git checkout -f
 $ cat foo.txt
 Hello, world
-{% endhighlight %}
+```
 
 As you can see, it only takes three persisted object files to represent a one file commit history.
 Finally, lets generate a new file 'baz.txt' which is stored in a directory called 'bar'.
 
-{% highlight bash %}
+```bash
 $ echo 'Bonjour' | git hash-object --stdin -w
 632e4fe73c3da8c9018008dbda117fc6b00e3e83
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ git update-index --add --cacheinfo 100644 632e4fe73c3da8c9018008dbda117fc6b00e3e83 bar/baz.txt
 $ git write-tree
 84483aa54b5cd02e76298c097831c51914c53821
 $ git cat-file -p 84483aa54b5cd02e76298c097831c51914c53821
 040000 tree 8ee16db87ef1f040f79a0e4cb843668369e96f70    bar
 100644 blob a5c19667710254f835085b99726e523457150e03    foo.txt
-{% endhighlight %}
+```
 
 In a similar manner to the first example, we persist both the file-contents blob and tree objects.
 The difference arrives when we wish to generate the second commit, we must now supply the parent commits hash (in our case the first commit) which will be used to calculate the graphs history when desired.
 
-{% highlight bash %}
+```bash
 $ git commit-tree 84483aa54b5cd02e76298c097831c51914c53821 -m "Second commit" -p HEAD
 18f4f9e35fe5d521f12c5a5b7bc7b969b472d4dd
 $ git cat-file -p 18f4f9e35fe5d521f12c5a5b7bc7b969b472d4dd
@@ -124,13 +124,13 @@ author Edd Mann <the@eddmann.com> 1419674876 +0000
 committer Edd Mann <the@eddmann.com> 1419674876 +0000
 
 Second commit
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ git update-ref HEAD 18f4f9e35fe5d521f12c5a5b7bc7b969b472d4dd
 $ git checkout -f
 $ cat bar/baz.txt
 Bonjour
-{% endhighlight %}
+```
 
 I hope this quick introduction to the internals of Git has helped you realise how simple, yet powerful the system has been modeled.

@@ -19,7 +19,7 @@ Though this may seem on the surface to over-complicate matters, removing the ben
 Using this technique allows us to easily replace instances with other conforming implementations - a good example of this can be seen for mocking objects when testing.
 Now that we have conceptualised the technique from a high-level, I know that personally nothing beats a clean, focused example.
 
-{% highlight php startinline %}
+```php
 class App {
 
     private static $instances = [];
@@ -45,7 +45,7 @@ class App {
     }
 
 }
-{% endhighlight %}
+```
 
 For brevity the solution shown above uses a static implementation, as we are only going to require a single container for this example.
 The two defined methods wrap the interaction with the associative array, allowing the user to either add or retrieve an instance (by name) from the container.
@@ -56,7 +56,7 @@ For simplicity, the option to provide a class name by string has been included.
 Supplying a class name creates a new instance of the class (by way of an empty constructor), with the instance being shared between retrieval requests (similar to a singleton).
 We can then use this implementation in the manner shown below.
 
-{% highlight php startinline %}
+```php
 interface MessageInterface {
 
     public function greeting();
@@ -74,13 +74,13 @@ App::set('message', function() { return new EnglishMessage(); });
 App::set('message', 'EnglishMessage');
 
 echo App::get('message')->greeting(); // Hello!
-{% endhighlight %}
+```
 
 It may seem like an over-complication to include an interface in this example, but the design choice will become clear in following discussion.
 We are now able to retrieve the desired class instance by name alone, ignoring any implementation details required to instantiate and return the instance.
 This abstraction also allows us to define an alternative implementation, shown below with replacing the existing example instance.
 
-{% highlight php startinline %}
+```php
 class FrenchMessage implements MessageInterface {
 
     public function greeting() { return 'Bonjour!'; }
@@ -90,7 +90,7 @@ class FrenchMessage implements MessageInterface {
 App::set('message', 'FrenchMessage');
 
 echo App::get('message')->greeting(); // Bonjour!
-{% endhighlight %}
+```
 
 The same call to the message instance at run-time will now use the alternative 'FrenchMessage' class instance.
 No tedious code modification is required as the process occurs dynamically.
@@ -103,7 +103,7 @@ PHP provides us with a very elegant way of solving this problem however, allowin
 With this power we are able to add the same level of indirection present in the IoC container, 'facading' the verbose resolution with the clean static syntax.
 Below is a simple implementation which addresses this requirement.
 
-{% highlight php startinline %}
+```php
 abstract class Facade {
 
     protected static function getName()
@@ -123,20 +123,20 @@ abstract class Facade {
     }
 
 }
-{% endhighlight %}
+```
 
 The example implementation above defines an abstract 'Facade' class which provides the dynamic static invocation required by each facade.
 There is a requirement for each facade created to override the 'getName' method, simply returning the related name of the container instance.
 As static methods can rightfully not be made abstract, we instead throw an exception which informs the user of this restriction.
-Being the only concrete method defined in the class, any resolved container instance with a method called 'getName' will not be successfully called as it will not invoke '__callStatic'.
+Being the only concrete method defined in the class, any resolved container instance with a method called 'getName' will not be successfully called as it will not invoke `__callStatic`.
 In a more developed implementation this method name could be changed to something that would reduce the risk of conflicting with instance method names.
-The other method that is defined is the [magic](http://www.php.net/manual/en/language.oop5.magic.php) '__callStatic' method, providing the ability to handle missing static method calls.
+The other method that is defined is the [magic](http://www.php.net/manual/en/language.oop5.magic.php) `__callStatic` method, providing the ability to handle missing static method calls.
 Using the name that is returned in the concrete facade class, we are able to retrieve the correct instance from the container.
 From here we simply check to see if the instance contains the method, if this is not the case we throw a suitable error for the user.
 Finally, we call the method on the instance, passing in any arguments that were specified and return the result.
 Belows example expands on the previous message implementation to take advantage of the more elegant looking facade type.
 
-{% highlight php startinline %}
+```php
 class Message extends Facade {
 
     protected static function getName() { return 'message'; }
@@ -154,7 +154,7 @@ try {
 } catch (Exception $ex) {
     echo $ex->getMessage();
 } // Message does not implement goodbye method.
-{% endhighlight %}
+```
 
 So now we have been able to create an implementation which has all the flexibility provided to us by dynamic class instantiation and invocation, while retaining the succinct properties of static classes.
 

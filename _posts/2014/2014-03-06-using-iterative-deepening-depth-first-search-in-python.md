@@ -20,7 +20,7 @@ The border must be taken into consideration upon each move, with only a maximum 
 Below is an example of the IDDFS algorithm, implemented to help solve the discussed puzzle problem.
 Providing the user with the requirement to specify a 'get_moves' function enables the ability to use the same implementation for different puzzle problems.
 
-{% highlight python %}
+```python
 def id_dfs(puzzle, goal, get_moves):
     import itertools
 
@@ -39,7 +39,7 @@ def id_dfs(puzzle, goal, get_moves):
         route = dfs([puzzle], depth)
         if route:
             return route
-{% endhighlight %}
+```
 
 Looking at the sample code above you will notice the use of 'itertools' infinite counter (starting from zero).
 The depth will continue to increment until a successful path is generated and returned to the user.
@@ -49,7 +49,7 @@ The depth will continue to increment until a successful path is generated and re
 The first problem we will solve with the above implementation is the common place numbered (3x3) 8-puzzle.
 Using the method below we are able generate the specified sized puzzle and goal matrices, which is useful to testing.
 
-{% highlight python %}
+```python
 def num_matrix(rows, cols, steps=25):
     import random
 
@@ -62,11 +62,11 @@ def num_matrix(rows, cols, steps=25):
         puzzle = random.choice(get_moves(puzzle))
 
     return puzzle, goal
-{% endhighlight %}
+```
 
 So as to make sure that the algorithm checks for only legal moves in our problem domain, the function below has been created that returns a partially-applied 'get_moves' method, based on the grid size and discussed restraints.
 
-{% highlight python %}
+```python
 def num_moves(rows, cols):
     def get_moves(subject):
         moves = []
@@ -96,15 +96,15 @@ def num_moves(rows, cols):
 
         return moves
     return get_moves
-{% endhighlight %}
+```
 
 We are now able to use all three of these functions to solve and return the optimal path to a contrived puzzle and goal state.
 
-{% highlight python %}
+```python
 puzzle, goal = num_matrix(3, 3) # ([[1, 5, 2], [4, 8, 0], [7, 6, 3]], [[1, 2, 3], [4, 5, 6], [7, 8, 0]])
 solution = id_dfs(puzzle, goal, num_moves(3, 3))
 len(solution) # 8
-{% endhighlight %}
+```
 
 ### String Matrix
 
@@ -112,7 +112,7 @@ Now that we are confident that the implementation is working correctly we can no
 Similar to the problem above we are still keeping hold of the border property, however, this time we are going to add the requirement to store and compare the subject paths in string format (compared to a multi-dimensional list).
 We first create a function which generate a contrived puzzle and goal state for us to then solve.
 
-{% highlight python %}
+```python
 def str_matrix(rows, cols, steps=25):
     import random, string
 
@@ -124,11 +124,11 @@ def str_matrix(rows, cols, steps=25):
         puzzle = random.choice(get_moves(puzzle))
 
     return puzzle, goal
-{% endhighlight %}
+```
 
 With this function now in place we then provide the ability to return valid present moves, based on a subject position.
 
-{% highlight python %}
+```python
 def str_moves(rows, cols):
     def get_moves(subject):
         moves = []
@@ -157,15 +157,15 @@ def str_moves(rows, cols):
 
         return moves
     return get_moves
-{% endhighlight %}
+```
 
 Finally, we can produce a similar example to the number matrix example to see the solution in action.
 
-{% highlight python %}
+```python
 puzzle, goal = str_matrix(3, 3) # (aebhg*dfc, abcdefgh*)
 solution = id_dfs(puzzle, goal, str_moves(3, 3))
 len(solution) # 12
-{% endhighlight %}
+```
 
 ## Resources
 

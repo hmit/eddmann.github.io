@@ -14,7 +14,7 @@ I wish to however, discuss how to reverse a Unicode string (UTF-8) using a combi
 
 To clearly highlight the examples, the function below is used throughout the post, returning how the string is represented in binary.
 
-{% highlight php startinline %}
+```php
 function str2bin($str)
 {
     return array_reduce(unpack('C*', $str), function($bin, $chr)
@@ -22,22 +22,22 @@ function str2bin($str)
         return $bin . str_pad(decbin($chr), 8, 0, STR_PAD_LEFT);
     }, '');
 }
-{% endhighlight %}
+```
 
 ## Naive Approach
 
-With many encodings that only include single-byte character representations (i.e. ASCII, ISO 8859-*) using the in-built 'strrev' function will work fine.
+With many encodings that only include single-byte character representations (i.e. ASCII, ISO 8859-*) using the in-built `strrev` function will work fine.
 However, the constructed UTF-8 string below contains a combination of ASCII-compatible characters and a multi-byte 'Black Star' character.
 You will notice that the two first bytes represent the 'a' and 'b' characters, and as they fit inside a single octet each they are not affected.
 The issue arises however, with the 'Black Star' character, which requires a three-byte representation.
 
-{% highlight php startinline %}
+```php
 $str = json_decode('"ab\\u2605"'); // ab★
 str2bin($str); // 01100001 01100010 11100010 10011000 10000101
 
 $naive = strrev($str); // ???ba
 str2bin($str); // 10000101 10011000 11100010 01100010 01100001
-{% endhighlight %}
+```
 
 If we naively use the 'strrev' function you will notice (aided by the binary representation) that the multi-byte character is corrupted.
 
@@ -49,7 +49,7 @@ The endianness is important, as you will notice that when we perform the transfo
 As we know this is the case we can specify this to encode back to UTF-8.
 Finally, we are left with a string which has been correctly reversed without any corruption.
 
-{% highlight php startinline %}
+```php
 $be = iconv('UTF-8', 'UTF-16BE', $str);
 str2bin($be); // 00000000 01100001 00000000 01100010 00100110 00000101
 
@@ -58,4 +58,4 @@ str2bin($tmp); // 00000101 00100110 01100010 00000000 01100001 00000000
 
 $res = iconv('UTF-16LE', 'UTF-8', $tmp); // ★ba
 str2bin($res); // 11100010 10011000 10000101 01100010 01100001
-{% endhighlight %}
+```

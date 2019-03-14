@@ -22,17 +22,17 @@ Though I have been discussing this solution in the case of caches, file-based PH
 You must first work out where session files for your PHP installation are stored.
 Note, that if your using PHP-FPM you may be required to modify the second configuration line.
 
-{% highlight bash %}
+```bash
 # /etc/php.ini
 session.save_path = /var/lib/php/session
 # /etc/php-fpm.conf
 php_value[session.save_path] = /var/lib/php/session
-{% endhighlight %}
+```
 
 We can then make sure that the directory has been created, along with the fall-back permissions.
 So as to temporary see the performance increases, we are able to mount the 'tmpfs' partition to the session directory, setting ownership to the desired user.
 
-{% highlight bash %}
+```bash
 mkdir -p /var/lib/php/session
 # fallback
 chown nginx:nginx /var/lib/php/session
@@ -40,13 +40,13 @@ chmod 755 /var/lib/php/session
 # temporary mount
 mount -t tmpfs -o size=32m,mode=0755,uid=$(id -u nginx),gid=$(id -g nginx) tmpfs /var/lib/php/session
 umount /var/lib/php/session
-{% endhighlight %}
+```
 
 If you are a satisfied with the configuration, you can persist the partition mount across reboots by adding the following line to your 'fstab' file.
 
-{% highlight bash %}
+```bash
 echo "tmpfs /var/lib/php/session tmpfs size=32m,uid=$(id -u nginx),gid=$(id -g nginx),mode=0755 0 0" >> /etc/fstab
-{% endhighlight %}
+```
 
 ## Resources
 

@@ -21,7 +21,7 @@ Before I began designing the below example, I did some research on prior work in
 This implementation also provided the option for values to be strictly typed, specifying each positions valid type (by way of a prototype).
 I was very impressed by this idea and decided to include it in my implementation, allowing for creation of more relaxed tuples using the 'mixed' data-type.
 
-{% highlight php startinline %}
+```php
 class Tuple extends SplFixedArray {
 
     protected $prototype;
@@ -96,7 +96,7 @@ class Tuple extends SplFixedArray {
     }
 
 }
-{% endhighlight %}
+```
 
 Looking at the example implementation above you will notice that I take full advantage of the SPLFixedArray class.
 The only array access method I override is 'offsetSet', which first checks based on the provided prototype the validity of the value.
@@ -107,13 +107,13 @@ The two interesting inclusions in this class that I would like to highlight are 
 Using the 'create' method you are able to create a partially applied class instantiation (providing the prototype).
 This allows you to use the implementation as shown below, creating a 'point' constructor (stored in a variable) which can be called with the desired values to form a concrete tuple instance.
 
-{% highlight php startinline %}
+```php
 $point = Tuple::create('double', 'double');
 
 $point(1.0, 2.5); // Tuple(1, 2.5)
 
 $point(1.5, 3.0)[1]; // 3.0
-{% endhighlight %}
+```
 
 ## Creating a Typed Tuple
 
@@ -122,16 +122,16 @@ I was able to achieve this by way of the 'eval' function (our good friend), dyna
 To provide the user with a more friendly way to create the data-type (inspired by Python) I also create a function (going by the same name) that returns a new instance of the class when invoked.
 Below is a similar example to the one displayed above, this time however, we are creating and using a new tuple data-type called Point.
 
-{% highlight php startinline %}
+```php
 Tuple::type('Point', [ 'double', 'double' ]);
 
 Point(1.0, 2.5); // Point(1, 2.5)
-{% endhighlight %}
+```
 
 This new data-type can then be used to type-hint against parameters in a function/method, as shown below.
 Note the use of the 'list' function to unpack the point into its constituent parts, before being returned in a new Point tuple.
 
-{% highlight php startinline %}
+```php
 function process(Point $point)
 {
     list($x, $y) = $point;
@@ -140,7 +140,7 @@ function process(Point $point)
 }
 
 process(Point(1.0, 2.5)); // Point(2, 5)
-{% endhighlight %}
+```
 
 ## Resources
 

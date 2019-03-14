@@ -13,26 +13,26 @@ In this case the language is PHP, and below are some of the many ways contrived 
 
 The implementation below is the most simple, taking advantage of PHP's vast amount of 'built-in' functions to reverse the supplied string.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     return strrev($str);
 }
-{% endhighlight %}
+```
 
 In a similar manner, we are able to compose a 'reverse' function by joining ([alias for 'implode'](http://php.net/function.join)) a reversed array of the string characters.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     return join('', array_reverse(str_split($str)));
 }
-{% endhighlight %}
+```
 
 The most imperative approach to reverse a string is by looping over each character with indexes at each end, swapping their contents upon each iteration.
 PHP's ability to access individual characters in an array manner turns out to be very useful in this case.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     for ($i = 0, $j = strlen($str) - 1; $i < $j; $i++, $j--) {
@@ -43,23 +43,23 @@ function reverse($str)
 
     return $str;
 }
-{% endhighlight %}
+```
 
 Though not best practice, the desired result can be compacted into a single 'for' loop declaration, shown below.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     for ($i = strlen($str) - 1, $out = ''; $i >= 0; $out .= $str[$i--]) {}
 
     return $out;
 }
-{% endhighlight %}
+```
 
 Another non-practical approach using the 'array_walk' function can be found below.
 An interesting implementation detail, is how you are able to clearly see that a copy of '$out' is being passed into the closure function.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     list($out, $len) = [ str_split($str), strlen($str) - 1 ];
@@ -71,7 +71,7 @@ function reverse($str)
 
     return join('', $out);
 }
-{% endhighlight %}
+```
 
 ## Recursive Implementations
 
@@ -79,7 +79,7 @@ The second group of implementations contrived used forms of recursion to achieve
 The first of such methods is a simple recursive invocation of the function, removing the head character upon each call.
 Once the string has reached one character, the base-case has been hit and the remaining string is simply returned.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     if (strlen($str) < 2) {
@@ -88,12 +88,12 @@ function reverse($str)
 
     return reverse(substr($str, 1)) . $str[0];
 }
-{% endhighlight %}
+```
 
 The implementation below takes advantage of the [divide and conquer](http://en.wikipedia.org/wiki/Divide_and_conquer_algorithm) algorithm paradigm, flipping the left and right substrings upon each recursive invocation.
 Similar to the previous example, if the base-case of a single character string is met, the remaining string is simply returned.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     if (strlen($str) < 2) {
@@ -106,7 +106,7 @@ function reverse($str)
 
     return reverse($rgt) . reverse($lft);
 }
-{% endhighlight %}
+```
 
 ## Unicode-Support Implementations
 
@@ -114,28 +114,28 @@ PHP's in-built support for Unicode strings is 'somewhat' lacking, as such, extra
 As Unicode character representations can consist of multiple bytes (i.e. UTF-8), we are unable to naively use 'strlen' and 'str_split' (which assume a character is always a single byte).
 The implementation below uses 'preg_split' support for Unicode characters, to correctly split the string into characters for us to reverse.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     return join('', array_reverse(preg_split('//u', $str, -1, PREG_SPLIT_NO_EMPTY)));
 }
-{% endhighlight %}
+```
 
 Using some [endianness](http://en.wikipedia.org/wiki/Endianness) conversion trickery we are able to use PHP's in-built 'strrev' function.
 The implementation below uses 'iconv' to achieve the desired results.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     return iconv('UTF-16LE', 'UTF-8', strrev(iconv('UTF-8', 'UTF-16BE', $str)));
 }
-{% endhighlight %}
+```
 
 Similar in-nature to the previous example, we are instead now using the 'mb' library to perform the conversion.
 
-{% highlight php startinline %}
+```php
 function reverse($str)
 {
     return mb_convert_encoding(strrev(mb_convert_encoding($str, 'UTF-16BE', 'UTF-8')), 'UTF-8', 'UTF-16LE');
 }
-{% endhighlight %}
+```

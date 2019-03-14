@@ -21,7 +21,7 @@ I was keen to provide a thought-experiment into how this could be implemented in
 
 Below is my first attempt at implementing the Y combinator in PHP, cheating a little by temporarily storing the fix-point function in a variable to remove code duplication.
 
-{% highlight php startinline %}
+```php
 function Y($F)
 {
     $x = function($f) use ($F)
@@ -34,12 +34,12 @@ function Y($F)
 
     return $x($x);
 }
-{% endhighlight %}
+```
 
 This function can be then be applied to solve the Fibonacci sequence, as shown below.
 As you can see the implementation provides us with the ability to reference the function by parameter instead of name (call-by-name), which in (typed) lambda calculus is not possible.
 
-{% highlight php startinline %}
+```php
 $fibonacci = Y(function($fib)
 {
     return function($n) use ($fib)
@@ -49,14 +49,14 @@ $fibonacci = Y(function($fib)
             : $n;
     };
 });
-{% endhighlight %}
+```
 
 ## Adding Memorization
 
 With the basic concept now implemented, we can simply expand on this example to include the ability to memorize function call results.
 Providing an initial empty cache, we first check to see if the hashed function call arguments have already be processed in the past, if so we skip the function invocation step and return the answer.
 
-{% highlight php startinline %}
+```php
 function YMemo($F, $cache = [])
 {
     $x = function($f) use ($F, &$cache)
@@ -75,11 +75,11 @@ function YMemo($F, $cache = [])
 
     return $x($x);
 }
-{% endhighlight %}
+```
 
 As the added memorization is an implementation detail, the user facing API has not changed and the function can again be expressed in the same manner as before (now with significant run-time speed increases).
 
-{% highlight php startinline %}
+```php
 $fibonacci = YMemo(function($fib)
 {
     return function($n) use ($fib)
@@ -89,14 +89,14 @@ $fibonacci = YMemo(function($fib)
             : $n;
     };
 });
-{% endhighlight %}
+```
 
 ## Using Closure Bindings
 
 Included more for it's athsetic appeal (syntactic sugar) we can take advantage of [Closure Bindings](http://www.php.net/manual/en/closure.bind.php) within PHP (since 5.4) to remove the need to explicitly pass in the fixed-point function.
 Although clearly violating the properties of a true Y-combinator, we are instead able to now simply invoke '$this' with the supplied arguments, providing a more user-friendly implementation.
 
-{% highlight php startinline %}
+```php
 function Yish($F)
 {
     $x = function($f) use ($F)
@@ -109,18 +109,18 @@ function Yish($F)
 
     return $x($x);
 }
-{% endhighlight %}
+```
 
 We can use the example of the Fibonacci sequence again, to this time make use of the closure bound implementation.
 
-{% highlight php startinline %}
+```php
 $fibonacci = Yish(function($n)
 {
     return $n > 1
         ? $this($n - 1) + $this($n - 2)
         : $n;
 });
-{% endhighlight %}
+```
 
 ## Resources
 

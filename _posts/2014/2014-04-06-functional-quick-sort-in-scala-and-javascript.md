@@ -13,7 +13,7 @@ Often referred to as 'partition-exchange' sort, this divide and conquer algorith
 
 This description can be clearly expressed in the Scala implementation shown below.
 
-{% highlight scala %}
+```scala
 def qsort(xs: List[Int]): List[Int] = xs match {
     case Nil => Nil
     case head :: tail => {
@@ -21,7 +21,7 @@ def qsort(xs: List[Int]): List[Int] = xs match {
         qsort(low) ::: head :: qsort(high)
     }
 }
-{% endhighlight %}
+```
 
 So as to highlight the key points in this post, the example has been restricted to only sort lists of integers.
 As well as this, the leftmost element is chosen as the pivot, causing worst-case behavior on already sorted arrays.
@@ -31,7 +31,7 @@ As well as this, the leftmost element is chosen as the pivot, causing worst-case
 Having been impressed by how well documented the intension's of the program were when writing in a functional style, I decided on attempting to implement the same example in JavaScript.
 Before I was able to achieve this however, I was required to setup a couple of array helper functions, shown below.
 
-{% highlight javascript %}
+```javascript
 Array.prototype.partition = function(fn)
 {
     var xs = [], ys = [], len = this.length, i, e;
@@ -58,21 +58,21 @@ Array.prototype.isEmpty = function()
 {
     return ! this.length;
 };
-{% endhighlight %}
+```
 
 As you can see the functions defined are similar to functionality already present in Scala's standard libraries.
 Variable unpacking is planned for inclusion in ECMAScript 6, though at this time, I decided to use a workaround within the current JavaScript specification that achieves a similar affect.
 
-{% highlight javascript %}
+```javascript
 function unpack(fn, el)
 {
     return fn.apply(null, el);
 }
-{% endhighlight %}
+```
 
 Finally, with the required helper functionality in place we are then able to define the Quick sort algorithm in JavaScript, using the same rules as the Scala implementation.
 
-{% highlight javascript %}
+```javascript
 Array.prototype.qsort = function()
 {
     if (this.isEmpty())
@@ -84,4 +84,4 @@ Array.prototype.qsort = function()
         return [].concat(low.qsort(), head, high.qsort());
     }, this.tail().partition(function(_) { return _ < head; }));
 };
-{% endhighlight %}
+```

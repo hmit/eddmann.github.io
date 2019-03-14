@@ -12,13 +12,13 @@ I opted for the simplicity of setting up only two partitions (root and home) usi
 
 ## Base Installation
 
-{% highlight bash %}
+```bash
 # check wifi connectivity
 $ wifi-menu
 $ ping www.google.com
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # format disk partitions
 $ lsblk /dev/sda
 $ mkfs.ext4 /dev/sda1 # root
@@ -28,9 +28,9 @@ $ mkfs.ext4 /dev/sda2 # home
 $ mount /dev/sda1 /mnt
 $ mkdir /mnt/home
 $ mount /dev/sda2 /mnt/home
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # install base
 $ pacstrap /mnt base
 
@@ -40,26 +40,26 @@ $ nano /mnt/etc/fstab # amend as necessary
 
 # change disk root
 $ arch-chroot /mnt /bin/bash
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # install GRUB2
 $ pacman -S grub
 $ grub-mkconfig -o /boot/grub/grub.cfg
 $ nano /boot/grub/grub.cfg # menu-entry listings
 $ grub-install --recheck /dev/sda
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # reboot into installed env
 $ exit
 $ umount /mnt/{home,}
 $ reboot
-{% endhighlight %}
+```
 
 ## Base Configuration
 
-{% highlight bash %}
+```bash
 # amend root password
 $ passwd
 
@@ -78,23 +78,23 @@ $ localectl set-locale LANG=en_GB.UTF-8
 # timezone
 $ ls /usr/share/zoneinfo/ # locate timezone
 $ timedatectl set-timezone Europe/London
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 $ nano /etc/pacman.conf # enable multilib (32bit)
 $ pacman -Syy
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # setup user
 $ useradd -m -g users -s /bin/bash edd
 $ passwd edd
 $ pacman -S sudo
 $ visudo # set user access
 # login as new account
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 # basic build utilities
 $ pacman -S multilib-devel fakeroot git jshon wget make pkg-config autoconf automake patch
 
@@ -103,11 +103,11 @@ $ wget http://aur.archlinux.org/packages/pa/packer/packer.tar.gz
 $ tar zxvf packer.tar.gz
 $ cd packer && makepkg
 $ pacman -U packer<tab>
-{% endhighlight %}
+```
 
 ## Graphics and X.Org Server
 
-{% highlight bash %}
+```bash
 # xorg
 $ pacman -S xorg-server xorg-xinit xorg-server-utils mesa
 $ pacman -S xorg-twm xorg-xclock xterm # basic components
@@ -117,14 +117,14 @@ $ pacman -S xf86-video-intel libva-intel-driver
 
 # laptop touchpad
 $ pacman -S xf86-input-synaptics
-{% endhighlight %}
+```
 
 ## Awesome Window Manager
 
-{% highlight bash %}
+```bash
 $ pacman -S awesome vicious
 $ cp /etc/skel/.xinitrc ~ # basic initrc
 $ echo "exec awesome" >> ~/.xinitrc
 $ mkdir -p ~/.config/awesome/
 $ cp /etc/xdg/awesome/rc.lua ~/.config/awesome/ # basic config
-{% endhighlight %}
+```

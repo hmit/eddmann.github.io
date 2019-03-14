@@ -17,7 +17,7 @@ For the remainder of the post I will be assuming that you have a sufficient setu
 Below is a simple function that uses the 'runkit' extension to rename the existing function declaration to a meaningful wrapped name, then includes this new functions name in a call to the wrapper function.
 This new logic is used to redefine the pre-existing original function name.
 
-{% highlight php startinline %}
+```php
 function decorate($func, $wrap)
 {
     $orig = $wrap . '_' . $func;
@@ -28,24 +28,24 @@ function decorate($func, $wrap)
     );
     runkit_function_add($func, '', $body);
 }
-{% endhighlight %}
+```
 
 ## Example Usage
 
 Now that we have defined the 'decorate' method, lets put it to the test with an arbitrary example.
 Below highlights an example which specifies a basic 'hello' function which we will soon hope to decorate.
 
-{% highlight php startinline %}
+```php
 function hello($name)
 {
     echo "Hello, $name!\n";
 }
-{% endhighlight %}
+```
 
 We will now define a couple of decorator functions used to log and time the specified functions activity.
 You will notice looking at the examples below that the functions require a function name and argument array to be supplied which is used to chain the calls together.
 
-{% highlight php startinline %}
+```php
 function logger($func, $args)
 {
     $name = explode('_', $func); // last function invoked.
@@ -60,11 +60,11 @@ function timer($func, $args)
     echo sprintf("%s: %f\n", $func, microtime(true) - $start);
     return $result;
 }
-{% endhighlight %}
+```
 
 With the sample function and decorators now defined we can compose a new function from these individual pieces.
 
-{% highlight php startinline %}
+```php
 decorate('hello', 'timer');
 decorate('hello', 'logger');
 
@@ -72,7 +72,7 @@ echo hello('Bob');
 // hello(Bob)
 // Hello, Bob!
 // timer_hello: 0.000007
-{% endhighlight %}
+```
 
 Looking at the example above you can see that we recompose the definition of the original 'hello' function to be wrapped by the 'timer' and 'logger' functions.
 With this new function we then call it with the argument 'Bob' which in-turn invokes the logger and timer functions, before calling the original code.

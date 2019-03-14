@@ -13,37 +13,37 @@ The forked background process will still be attached to its parent, meaning any 
 The process ID (PID) of this new job is stored in a special variable called '$!', allowing you to easily refer back to it at a later date.
 Below is an example of sending a copy command to a background process.
 
-{% highlight bash %}
+```bash
 $ cp /path/to/file /path/to/destination/file &
 [1] 50024 # example returned PID
-{% endhighlight %}
+```
 
 You are able to list the currently active jobs within the shell instance using the command 'jobs'.
 
-{% highlight bash %}
+```bash
 $ jobs
 [1]+  Running  cp /path/to/file /path/to/destination/file &
-{% endhighlight %}
+```
 
 You can return to a background process by requesting it be transfered to the foreground, using the 'fg' command.
 Using the 'jobs' output we are able to specify a job number as an argument to the command, or by default it will act upon the job with a '+' supplied.
 
-{% highlight bash %}
+```bash
 $ fg %1 # optional job number
-{% endhighlight %}
+```
 
 From here you are able to issue any desired kill (Ctrl-C) or suspend (Ctrl-Z) commands.
 If you forget or now wish to run the current command in the background, you can suspend (pause) the action and then run 'bg'.
 
-{% highlight bash %}
+```bash
 $ cp /path/to/file /path/to/destination/file
 [1]+  Stopped  cp /path/to/file /path/to/destination/file
 $ bg
 [1]+  Running  cp /path/to/file /path/to/destination/file
-{% endhighlight %}
+```
 
 Finally you can kill a job without having to bring it back to the foreground by calling the 'kill' command and optionally specifying a number (similar to the 'fg' command).
 
-{% highlight bash %}
+```bash
 $ kill %1 # optional job number
-{% endhighlight %}
+```

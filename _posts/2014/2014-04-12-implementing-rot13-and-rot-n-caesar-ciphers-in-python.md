@@ -16,11 +16,11 @@ As the basic Latin alphabet is 26 letters long, the same algorithm implementatio
 
 Using Python 3.4 as the implementation language we are able to simply use the provided (*batteries included*) 'encode' method as shown below.
 
-{% highlight python %}
+```python
 def rot13(s):
     from codecs import encode
     return encode(s, 'rot13')
-{% endhighlight %}
+```
 
 ## Mapping Implementation
 
@@ -29,7 +29,7 @@ The example below highlights the same functionality (limited to the Latin alphab
 Each character is passed into the 'lookup' function that returns the valid replacement value, not altering non-alphabet characters.
 I would like to point out Python's ability to succinctly express the between conditions, using a standard math-chaining comparison syntax.
 
-{% highlight python %}
+```python
 def rot13_alpha(s):
     def lookup(v):
         o, c = ord(v), v.lower()
@@ -41,7 +41,7 @@ def rot13_alpha(s):
     return ''.join(map(lookup, s))
 
 rot13_alpha('Hello World') # Uryyb Jbeyq
-{% endhighlight %}
+```
 
 ## Generic Alphabet Shift Implementation
 
@@ -50,14 +50,14 @@ I decided on using partial function application to allow for rotation functions 
 For example the use-case below follows a single invocation of the initially implemented function.
 We could have instead assigned this function to a variable (say 'rot13') and call at will.
 
-{% highlight python %}
+```python
 def rot_alpha(n):
     from string import ascii_lowercase as lc, ascii_uppercase as uc
     lookup = str.maketrans(lc + uc, lc[n:] + lc[:n] + uc[n:] + uc[:n])
     return lambda s: s.translate(lookup)
 
 rot_alpha(13)('Hello World') # Uryyb Jbeyq
-{% endhighlight %}
+```
 
 ## Generic Shift Implementation
 
@@ -67,21 +67,21 @@ The example below removes this constraint, allowing the user to pass in each of 
 These passed in values are used to create an encoded lookup table, based on the position length (similar to the previous example).
 Finally, the lookup table is used by Python's string translation method to return the processed value.
 
-{% highlight python %}
+```python
 def rot(*symbols):
     def _rot(n):
         encoded = ''.join(sy[n:] + sy[:n] for sy in symbols)
         lookup = str.maketrans(''.join(symbols), encoded)
         return lambda s: s.translate(lookup)
     return _rot
-{% endhighlight %}
+```
 
 Below highlights the discussed number encoding by five positions.
 We are able to compose a new function based on the partial application nature of the 'rot' function.
 Latin alphabet encoding is also present with the five position length invariant.
 I would like to note that a separate decode implementation is required (-N), as unlike ROT13 the encode algorithm is not it's own inverse.
 
-{% highlight python %}
+```python
 rot5_num = rot('0123456789')(5)
 rot5_num('1234') # 6789
 
@@ -91,4 +91,4 @@ rot5_alpha_dec = rot_alpha(-5)
 
 enc = rot5_alpha_enc('Hello World') # Mjqqt Btwqi
 rot5_alpha_dec(enc) # Hello World
-{% endhighlight %}
+```

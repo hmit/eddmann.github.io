@@ -18,7 +18,7 @@ The first step is to open up Automator located in '/Applications' and create a n
 From here we can then locate and add a 'Run AppleScript' action from the middle panel.
 With this added replace the template content with the script found below, which simple toggles between full input volume level and muted.
 
-{% highlight applescript %}
+```applescript
 if input volume of (get volume settings) = 0 then
     set level to 100
 else
@@ -26,7 +26,7 @@ else
 end if
 
 set volume input volume level
-{% endhighlight %}
+```
 
 With this added we now need to set the Service receives to 'no input' and in 'any application'.
 Finally, save the service with a meaningful name.

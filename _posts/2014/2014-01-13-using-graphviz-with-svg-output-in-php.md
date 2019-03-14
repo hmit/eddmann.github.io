@@ -21,7 +21,7 @@ I made the assumption that the 'dot' command (provided by Graphviz) is present i
 For consistency I decided to declare graph definitions using Markdown Extra's [fenced blocks](http://michelf.ca/projects/php-markdown/extra/#fenced-code-blocks) notation, discussed further in the [Pygments post](/posts/using-pythons-pygments-syntax-highlighter-in-php/).
 Providing the code block with a unique '.dot-show' language type-hint allowed me to be sure of no conflicting pre-processes.
 
-{% highlight php startinline %}
+```php
 function graphviz($post)
 {
     return preg_replace_callback('/~~~[\s]*\.dot-show\n(.*?)\n~~~/is', function($match)
@@ -55,7 +55,7 @@ function graphviz($post)
         return $output;
     }, $post);
 }
-{% endhighlight %}
+```
 
 Looking at the example above you will notice the use of the same regular expression replacement and process command calls found in the Pygments implementation.
 All that has been altered is the processing occurred on the outputted result and of course the command itself.
@@ -70,8 +70,7 @@ Now that we have an example implementation to work with, lets see some of the im
 
 Inspired by the great article found [here](http://www.ffnn.nl/pages/articles/media/uml-diagrams-using-graphviz-dot.php), I was able to describe a simple UML Class Diagram in .dot notation and output the results in SVG.
 
-{% highlight text %}
-{% raw %}
+```
 digraph G
 {
     node [
@@ -97,13 +96,11 @@ digraph G
         taillabel = "0..*"
     ]
 }
-{% endraw %}
-{% endhighlight %}
+```
 
 ### Binary Tree
 
-{% highlight text %}
-{% raw %}
+```
 digraph G
 {
     graph[ordering="out"];
@@ -115,13 +112,11 @@ digraph G
     8 -> 6;
     8 -> null;
 }
-{% endhighlight %}
-{% endraw %}
+```
 
 ### Circularly Doubly Linked-List
 
-{% raw %}
-{% highlight text %}
+```
 digraph G
 {
     n1 [label="Linked List|{size: 3}",
@@ -140,15 +135,14 @@ digraph G
     n3 -> n2 [label="previous"];
     n2 -> n5 [label="previous"];
 }
-{% endraw %}
-{% endhighlight %}
+```
 
 ### Huffman Coding Tree
 
 Using [this](http://huffman.ooz.ie/) generator I was able to visually represent the Huffman Tree for a given string.
 
-{% highlight text %}
-{% raw %}
+```
+{%- raw -%}
 digraph G
 {
     edge [label=0];
@@ -179,8 +173,8 @@ digraph G
     TCOMASR -> SR -> R [label=1];
     18 -> 10 -> 6 -> L [label=1];
 }
-{% endraw %}
-{% endhighlight %}
+{% endraw -%}
+```
 
 ## Resources
 

@@ -17,7 +17,7 @@ Finally, we set the cookie parameters of the session identifier.
 These parameters can be overridden when initialising the session handler, however, recommended defaults of only allowing it to be sent over HTTPS (if present) and restricted HTTP access (no client-side script access).
 It is recommended that you override the path and domain based on the application instance (abiding by the principle of least privilege).
 
-{% highlight php startinline %}
+```php
 class SecureSessionHandler extends SessionHandler {
 
     protected $key, $name, $cookie;
@@ -56,7 +56,7 @@ class SecureSessionHandler extends SessionHandler {
     // ...
 
 }
-{% endhighlight %}
+```
 
 ## Session Management
 
@@ -65,7 +65,7 @@ The 'start' method in-principle wraps the 'session_start' function, however, as 
 The 'forget' method removes the contents of the '$_SESSION' array (for access during the remainder of the current request), expires the session cookie and then destroys the session itself.
 Finally, the 'refresh' method replaces the current session identifier with a new one.
 
-{% highlight php startinline %}
+```php
 public function start()
 {
     if (session_id() === '') {
@@ -98,7 +98,7 @@ public function refresh()
 {
     return session_regenerate_id(true);
 }
-{% endhighlight %}
+```
 
 ## Session Content Encryption
 
@@ -108,7 +108,7 @@ In this case I have decided to encrypt/decrypt (using mcrypt) the serialized con
 Typically the session contents are written to plain-text files, and if not correctly configured (file permissions, directory location) are stored in the global PHP session directory.
 This may not be an issue if you have sole access to the server (or are using a security patch such as [Suhosin](http://www.hardened-php.net/suhosin/)), but in a shared-hosting environment could result in a major security breach.
 
-{% highlight php startinline %}
+```php
 public function read($id)
 {
     return mcrypt_decrypt(MCRYPT_3DES, $this->key, parent::read($id), MCRYPT_MODE_ECB);
@@ -118,7 +118,7 @@ public function write($id, $data)
 {
     return parent::write($id, mcrypt_encrypt(MCRYPT_3DES, $this->key, $data, MCRYPT_MODE_ECB));
 }
-{% endhighlight %}
+```
 
 ## Session Expiration and Validation
 
@@ -128,7 +128,7 @@ The example below stores the time of the last activity in the user's session - c
 Fingerprinting the current session with the user's user-agent and IP address allows us to provide another layer of security against session hijacking.
 To address network proxy issues (which could cause false positives), only the first two IP blocks are used in the calculation of the fingerprint hash.
 
-{% highlight php startinline %}
+```php
 public function isExpired($ttl = 30)
 {
     $activity = isset($_SESSION['_last_activity'])
@@ -164,14 +164,14 @@ public function isValid($ttl = 30)
 {
     return ! $this->isExpired($ttl) && $this->isFingerprint();
 }
-{% endhighlight %}
+```
 
 ## Session Access
 
 This section is not exactly security related, but as we are creating a session wrapper, it would be worthwhile to provide the ability to add and retrieve session values based on dot notation.
 Doing so increases the readability when accessing large array based data-structures.
 
-{% highlight php startinline %}
+```php
 public function get($name)
 {
     $parsed = explode('.', $name);
@@ -209,7 +209,7 @@ public function put($name, $value)
 
     $session[array_shift($parsed)] = $value;
 }
-{% endhighlight %}
+```
 
 ## Example Usage
 
@@ -217,18 +217,18 @@ With the implementation now in place we can see the example in-practice.
 I have constructed a test environment which makes sure that the PHP configuration uses session files, stored in a relative directory.
 In conjunction, we create a new session handler instance (passing in our encryption key) and register it with the PHP engine.
 
-{% highlight php startinline %}
+```php
 $session = new SecureSessionHandler('cheese');
 
 ini_set('session.save_handler', 'files');
 session_set_save_handler($session, true);
 session_save_path(__DIR__ . '/sessions');
-{% endhighlight %}
+```
 
 Finally, we start the session instance and add a worthwhile validation check (expiration of five minutes), deleting the session if the checks do not pass.
 Values can then be added to the current session using the 'put' method and accessed in a similar manner.
 
-{% highlight php startinline %}
+```php
 $session->start();
 
 if ( ! $session->isValid(5)) {
@@ -238,7 +238,7 @@ if ( ! $session->isValid(5)) {
 $session->put('hello.world', 'bonjour');
 
 $session->get('hello.world'); // bonjour
-{% endhighlight %}
+```
 
 The full class implementation can be found as a Gist - [SecureSessionHandler.php](https://gist.github.com/eddmann/10262795).
 

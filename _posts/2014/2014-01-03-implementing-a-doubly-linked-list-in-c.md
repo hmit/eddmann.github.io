@@ -11,7 +11,7 @@ The head and tail nodes can be terminated with either [sentinel nodes](http://en
 An observational implementation difference between the two structures is that through storing the previous and next reference, it can significantly simplify the complexity and running time of certain operations (removal from the tail being the most obvious).
 <!--more-->
 
-{% highlight c %}
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     list(); // 8 7 6 1 2 3
 }
-{% endhighlight %}
+```
 
 Looking at the implementation above you will notice the omission of the list traversal when removing a node from the tail, as the previous nodes reference is already at hand.
 The 'list' method only takes into consideration forward iteration over the list, however, it would be very easy to modify the code to perform backwards traversal.

@@ -14,7 +14,7 @@ Below is a simple script I wrote in Python (3) that grabs the latest entry from 
 By default it creates a Markdown formatted list, but this can be changed at the command line, by supplying another Python-format compliant string.
 It is required that the script has access to an environment with '[xerox](https://pypi.python.org/pypi/xerox/)' and '[beautifulsoup4](https://pypi.python.org/pypi/beautifulsoup4)' packages installed.
 
-{% highlight python %}
+```python
 #!/usr/bin/env python3
 import sys, requests, xerox
 from bs4 import BeautifulSoup
@@ -36,6 +36,6 @@ for link in xerox.paste().split('\n'):
         print('x')
 
 xerox.copy('\n'.join(links))
-{% endhighlight %}
+```
 
-For convenience of invocation I store this script in my '~/bin' directory with execute privileges, allowing me to not have to specify the Python interpretor.
+For convenience of invocation I store this script in my '~/bin' directory with execute privileges, allowing me to not have to specify the Python interpreter.

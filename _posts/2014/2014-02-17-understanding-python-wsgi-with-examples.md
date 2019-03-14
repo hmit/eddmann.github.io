@@ -15,7 +15,7 @@ Simply put a WSGI (Web Sever Gateway Interface) compliant application must suppl
 For a familiar PHP comparison, you can think of the 'environ' dictionary as a combined '$_SERVER', '$_GET' and '$_POST', with extra processing required.
 This callable is expected to invoke the 'start_response' function with the desired response-code/header-data, and then return a byte iterable with the response body.
 
-{% highlight python %}
+```python
 def app(environ, start_response):
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'Hello, world!']
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except KeyboardInterrupt:
         print('Goodbye.')
-{% endhighlight %}
+```
 
 Using the single-threaded [WSGI reference](http://docs.python.org/3.3/library/wsgiref.html) implementation provided with Python is a great choice for experimenting with these lower-level concepts.
 You will notice that as the example is written for Python 3 we must return an iterable (in this case a list) with declared 'byte' content inside.
@@ -38,7 +38,7 @@ You will notice that as the example is written for Python 3 we must return an it
 Now that we are familiar with the basic structure of a WSGI compliant application we can now experiment with a more practical example.
 Below we provide the client with a simple form which posts a supplied 'name' for the application to greet accordingly.
 
-{% highlight python %}
+```python
 import cgi
 
 form = b'''
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except KeyboardInterrupt:
         print('Goodbye.')
-{% endhighlight %}
+```
 
 Although somewhat verbose we have been able to create a simple web application which handles supplied POST data using the CGI modules 'FieldStorage' class.
 These are the very simplified building blocks used in popular frameworks such as [Flask](http://flask.pocoo.org/) and [Django](http://www.djangoproject.com/).

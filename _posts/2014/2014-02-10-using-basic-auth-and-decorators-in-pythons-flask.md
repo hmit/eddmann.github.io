@@ -16,11 +16,11 @@ We must first setup a new virtual environment to cleanly handle external depende
 As Python libraries are shared at the system level by default, virtualenv provides projects with their own custom installation directories.
 This resolves the issue of different projects requiring different versions of the same package.
 
-{% highlight bash %}
+```bash
 $ virtualenv venv
 $ source venv/bin/activate
 $ pip install Flask
-{% endhighlight %}
+```
 
 Using the commands provided above we first create a new virtual environment called 'venv' in the projects root directory.
 To configure the python, pip etc. commands to take notice of the custom installation directories within the current shell instance,  we must source the 'activate' script.
@@ -32,15 +32,15 @@ We are now ready to implement the web application logic.
 A design decision I have made is to separate the login credentials into their own 'settings' file.
 This is good practice and with Python's everything is an object philosophy defining the file is easy.
 
-{% highlight python %}
+```python
 USER='admin'
 PASS='password'
-{% endhighlight %}
+```
 
 As you can see the file requires no boilerplate code and simply specifies the two desired variables.
 With the settings now defined we can move on to implementing the web application itself.
 
-{% highlight python %}
+```python
 from flask import Flask, Response, request
 from functools import wraps
 
@@ -70,7 +70,7 @@ def secure():
 
 if __name__ == '__main__':
     app.run(debug=True)
-{% endhighlight %}
+```
 
 Using Flask's ability to import configuration options from external objects, we are able to access the specified credentials in the 'valid_credentials' function.
 To provide the 'secure' route with the required basic authentication I created a simple wrapper method which is used to decorate the route.
@@ -78,10 +78,10 @@ Decorators are a super simple, yet increasingly powerful concept, allowing you t
 As this is an experiment I have specified that the application be run in debug mode, enabling auto-reloading of updated files within the local development server.
 Finally we are ready to run the application.
 
-{% highlight bash %}
+```bash
 $ python main.py
 $ pip freeze > requirements.txt
-{% endhighlight %}
+```
 
 After checking to make sure that our handy work has been successful we can 'freeze' the required dependencies so as to ease future development and deployment.
 

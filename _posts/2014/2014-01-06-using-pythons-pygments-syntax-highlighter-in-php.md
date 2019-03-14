@@ -22,10 +22,10 @@ I could now see why the Ruby-based Jekyll project had gone to the effort to depe
 Looking deeper into Pygments success, the questions were answered by the attention paid to supporting new languages and edge-cases within the languages I was interested in using it for.
 Installation of Pygments can be simply achieved by using the [EasyInstall](http://pypi.python.org/pypi/setuptools) package manager, or on a CentOS installation, via YUM.
 
-{% highlight bash %}
+```bash
 $ sudo easy_install Pygments # EasyInstall
 $ sudo yum install python-pygments # CentOS
-{% endhighlight %}
+```
 
 ## Bridging the Python and PHP Divide
 
@@ -35,7 +35,7 @@ Fortunately, before updating my blog I had decided to use the [Markdown Extra](h
 I had also added the extra restraint of declaring these blocks with three tilde characters and a class language type-hint (~~~ .example).
 This decision proved very useful when producing the example implementation below, though, it can be easily expanded to cater for more code-block declarations.
 
-{% highlight php startinline %}
+```php
 function pygments($post)
 {
     return preg_replace_callback('/~~~[\s]*\.([a-z]+)\n(.*?)\n~~~/is', function($match)
@@ -59,7 +59,7 @@ function pygments($post)
             : $output;
     }, $post);
 }
-{% endhighlight %}
+```
 
 Coupled with the decision to only handle a defined code-block definition, I also made the assumption that the 'pygmentize' command is present in the user's path (this can be easily altered to).
 Using the 'proc_open' function supplied by PHP I was able to begin a child-process which used the defined STDIN, STDOUT and STDERR descriptor pipes I supplied.

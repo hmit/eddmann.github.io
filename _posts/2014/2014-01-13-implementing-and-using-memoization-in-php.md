@@ -18,7 +18,7 @@ Though I am impressed with the discussed module I wished to see if it was possib
 
 Below depicts a simple example implementation of a memoization function which takes advantage of PHP's first-class function support.
 
-{% highlight php startinline %}
+```php
 $memoize = function($func)
 {
     return function() use ($func)
@@ -35,7 +35,7 @@ $memoize = function($func)
         return $cache[$key];
     };
 };
-{% endhighlight %}
+```
 
 Using a static 'cache' array allows us to keep a persistent lookup table between calls of the returned function.
 In conjunction with this, hashing the serialised arguments array allows us to create a unique key we can set and lookup in the associative array per call.
@@ -46,7 +46,7 @@ The method supports either anonymous or string identified functions, using the '
 Now that we have an implementation it is time to benchmark its performance, to see the resulting gains.
 Below is a simple function which prints out the resulting time duration taken for the supplied function to run.
 
-{% highlight php startinline %}
+```php
 $timer = function($func)
 {
     return function() use ($func)
@@ -57,11 +57,11 @@ $timer = function($func)
         return $result;
     };
 };
-{% endhighlight %}
+```
 
 We can now use the above function to benchmark the performance of the side-effect free 'sleepz' function declared below.
 
-{% highlight php startinline %}
+```php
 function sleepz($time)
 {
     sleep($time);
@@ -80,7 +80,7 @@ $sleepz(1); // 1.001016
 
 // 2nd Memoize
 $sleepz(1); // 0.000028
-{% endhighlight %}
+```
 
 As you can deduce from the output, the second call to the memoized function is significantly quicker than the first.
 Comparing the non-memoized and first memoized function calls results in very similar time duration, as they are doing the same work.
@@ -95,7 +95,7 @@ Declaring use of a reference to the function assignment variable successfully al
 This detail now requires the code logic be present in an anonymous function.
 As this is a thought exercise rather than a production ready implementation I am happy with the capabilities currently available in the language.
 
-{% highlight php startinline %}
+```php
 $factorial = $memoize(function($n) use (&$factorial)
 {
     return ($n < 2) ? 1 : $n * $factorial($n - 1);
@@ -109,7 +109,7 @@ $fibonacci = $memoize(function($n) use (&$fibonacci)
 $factorial(10); // 3628800
 
 $fibonacci(10); // 55
-{% endhighlight %}
+```
 
 ## Resources
 

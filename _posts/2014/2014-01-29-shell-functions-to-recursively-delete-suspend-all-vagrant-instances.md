@@ -10,7 +10,7 @@ One issue I do find that arises is managing currently running and obsolete insta
 Port conflicts can be a huge pain to correct if you are like me and use Vagrant for many different projects at one time, resorting to loading up VirtualBox.
 To help ease the pain I have created two shell script functions (tested in Bash) for recursively locating and either deleting or suspending Vagrant instances it finds.
 
-{% highlight bash %}
+```bash
 function vagrant-destroy-all() {
     DIR=${1:-$(pwd)}
     find $DIR \
@@ -18,9 +18,9 @@ function vagrant-destroy-all() {
         -name .vagrant \
         -exec sh -c '(cd $(dirname {}) && pwd && vagrant destroy -f)' \;
 }
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```bash
 function vagrant-suspend-all() {
     DIR=${1:-$(pwd)}
     find $DIR \
@@ -28,7 +28,7 @@ function vagrant-suspend-all() {
         -name .vagrant \
         -exec sh -c '(cd $(dirname {}) && pwd && vagrant suspend)' \;
 }
-{% endhighlight %}
+```
 
 The two functions above allow you to provide a starting directory to locate instances, based on the existence of a '.vagrant' directory.
 If no path is provided the present working directory is used instead.

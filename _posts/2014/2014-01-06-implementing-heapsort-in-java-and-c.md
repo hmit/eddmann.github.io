@@ -21,7 +21,7 @@ However, though the option for in-place sorting, it is not stable, resulting in 
 Below is an implementation of the Heapsort algorithm written in Java.
 I was able to simply add the flexibility provided by generalising the sorting algorithm to any class that implemented the [Comparable](http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html) interface.
 
-{% highlight java %}
+```java
 public class Heap {
 
     private static int total;
@@ -71,7 +71,7 @@ public class Heap {
     }
 
 }
-{% endhighlight %}
+```
 
 Looking at the implementation above you will notice that the first step the sorting method takes is to create a heap structure from the input.
 Calling the 'heapify' method on the first half of the input array guarantees (by recursion) to build up the heap data structure and fulfill the heap property.
@@ -83,7 +83,7 @@ Below is a C implementation, similar to the above Java example.
 Using macros I was able to abstract away some of the repetitive code used to count and swap items in the subject array.
 In this case I decided against adding confusion to the resulting implementation with the introduction of void pointer generalisation, and instead focused only on integer input.
 
-{% highlight c %}
+```c
 #include <stdio.h>
 
 #define COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     sort(arr, size);
     PRINT(arr, size);
 }
-{% endhighlight %}
+```
 
 As I discussed above this implementation is very similar to its Java counterpart.
 One small 'hack' that I found very useful in C's macro system was the use of a 'do/while' loop to create multi-line definitions with the least compiler issues.

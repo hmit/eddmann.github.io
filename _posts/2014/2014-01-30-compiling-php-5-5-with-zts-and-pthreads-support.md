@@ -20,16 +20,16 @@ To compile PHP from source we must first make sure the development tools require
 One issue that cropped up when trying to install the 'Development Tools' group was the complaint of not having access to kernel packages.
 To overcome this problem I simply removed 'kernal*' from the excluded list provided in '/etc/yum.conf'.
 
-{% highlight bash %}
+```bash
 $ sed -i "s/^\exclude.*$/exclude=/g" /etc/yum.conf
 $ yum groupinstall -y 'Development Tools'
-{% endhighlight %}
+```
 
 Looking at the first command above we remove all excludes that have currently been set, in my case this was only 'kernal*', but I recommend you check your setup first.
 We are now able to install the required packages to download the compressed source code and compile the XML library provided in PHP.
 I decided to set a global variable with the desired version of PHP I wished to compile, making the command listing more flexible when updates arise.
 
-{% highlight bash %}
+```bash
 $ VERSION=5.5.8 # set version
 $ yum install -y wget libxml2-devel
 $ cd /usr/local/src
@@ -40,7 +40,7 @@ $ ./configure --prefix=/usr --with-config-file-path=/etc --enable-maintainer-zts
 $ make
 $ make install
 $ cp php.ini-development /etc/php.ini
-{% endhighlight %}
+```
 
 We download and uncompress the source code into the preferred '/usr/local/src' directorty.
 From here we configure the build to meet are requirements.
@@ -53,17 +53,17 @@ Finally I copy across the development 'php.ini' file to the specified '/etc' dir
 PHP comes with [PECL](http://pecl.php.net/) (PHP Extension Community Library) command support by default, which saves us the hassle of having to compile the extension manually.
 We can instead just run the installation command below.
 
-{% highlight bash %}
+```bash
 $ pecl install pthreads
 $ echo "extension=pthreads.so" >> /etc/php.ini
-{% endhighlight %}
+```
 
 With the extension now successfully installed, we must now include the extension to be loaded in the 'php.ini' configuration file.
 We can test that the extension has been successfully loaded with the PHP interpretor by running and inspecting the output from the following command.
 
-{% highlight bash %}
+```bash
 $ php -m | grep pthreads
-{% endhighlight %}
+```
 
 ## Resources
 

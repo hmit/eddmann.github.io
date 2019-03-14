@@ -17,7 +17,7 @@ In this post I will go over three different techniques for achieving this by loa
 The example implementation below is the simplest example of providing the client with fallback options.
 Inspired by the [HTML5 Boilerplates](http://html5boilerplate.com/) jQuery fallback example, I have expanded this solution to cater for Twitter Bootstrap.
 
-{% highlight html %}
+```html
 <!-- jQuery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/jquery-1.10.2.min.js"><\/script>')</script>
@@ -34,7 +34,7 @@ Inspired by the [HTML5 Boilerplates](http://html5boilerplate.com/) jQuery fallba
         });
     })(window.jQuery);
 </script>
-{% endhighlight %}
+```
 
 To check the Bootstrap JavaScript is loaded we test for the existence of one of the provided plugins, in this case 'modal'.
 The CSS is a little more tricky, on top of including the CDN provided stylesheet in the head, we wait for the page to be fully loaded and check to see if the body color matches are expectations.
@@ -46,7 +46,7 @@ This example uses jQuery for ease of explanation, as we can be confident at this
 The second example takes advantage of the great [YepNope](http://yepnopejs.com/) library, providing us with the ability to test for existence of a predicate and act upon this result.
 Including YepNope and the provided CSS plugin extension in the document head, we are able to be sure that the 'complete' callbacks will only be invoked when either the related JS or CSS assets have been fully loaded.
 
-{% highlight javascript %}
+```javascript
 yepnope([{
     load: '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
     complete: function() {
@@ -63,7 +63,7 @@ yepnope([{
         window.jQuery.fn.modal || yepnope('/js/bootstrap-3.0.3.min.js');
     }
 }]);
-{% endhighlight %}
+```
 
 You will notice that this example is very similar to the basic implementation, testing for the existence of window variables and CSS body properties.
 However, using this library provides you with the ability to load these assets asynchronously and in parallel (based on the ordering provided).
@@ -76,7 +76,7 @@ The final example uses the incredibly small library [Fallback.js](http://fallbac
 This can be seen by how simple the API is to use, with default checking of window variable existence based on the assets key name.
 Similar to the features provided in YepNope such as loading resources asynchronously we are able to increase page loading times with minimal hassle.
 
-{% highlight javascript %}
+```javascript
 fallback.load({
     bootstrapCss: '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css',
     jQuery: [
@@ -92,7 +92,7 @@ fallback.load({
         'jQuery.fn.modal': [ 'jQuery' ] // bootstrap
     }
 });
-{% endhighlight %}
+```
 
 The one issue with this library is that it is tied into checking the window object for resource existence.
 This does not work well in the case of checking for the successful loading of CSS assets, as we are unable to override the predicate to check for body styling.

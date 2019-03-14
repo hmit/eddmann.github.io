@@ -9,7 +9,7 @@ As a quick thought experiment I decided to see if it would be possible to use Ja
 <!--more-->
 This experiment resulted in the code you see below, permitting the lifting of operators into functions which can be passed around and used as expected.
 
-{% highlight js %}
+```js
 let assoc = (ops, fn) =>
   ops
     .split(' ')
@@ -22,4 +22,4 @@ let postfix = assoc('()', op => Function('a', `return a ${op}`));
 let ƒ = (op) => infix[op] || prefix[op] || postfix[op];
 
 [1, 2, 3, 4].reduce(ƒ('+'));
-{% endhighlight %}
+```

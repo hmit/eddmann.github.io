@@ -19,7 +19,7 @@ In this article I will discuss two examples of implementing the Stream data-stru
 
 The first implementation I will be discussing uses a 'Classical' approach, relying on a tail-promise function to return the next element in the Stream.
 
-{% highlight php startinline %}
+```php
 class Stream implements Iterator
 {
     const NIL_SENTINEL = null;
@@ -115,23 +115,23 @@ class Stream implements Iterator
         return new self(self::NIL_SENTINEL);
     }
 }
-{% endhighlight %}
+```
 
 Looking at the above implementation you can see how much boilerplate code is required to make the Stream iterable.
 Through use of the tail promise we are able to defer execution of calculating the next element in the Stream until absolutely required.
 The inclusion of a 'nil' sentinel simplifies the design, as we are not required to use polymorphism and separate Nil and Cons implementations.
 So as to not detract from the following examples intent, we will be using the following function to display the returned iterators.
 
-{% highlight php startinline %}
+```php
 function sprint($xs)
 {
     echo '[' . implode(', ', iterator_to_array($xs)) . "]\n";
 }
-{% endhighlight %}
+```
 
 Using this helper function we are now able to experiment with this initial implementation.
 
-{% highlight php startinline %}
+```php
 $isEven = function ($x) { return $x % 2 == 0; };
 
 sprint(Stream::range()->filter($isEven)->take(5)); // [2, 4, 6, 8, 10]
@@ -148,7 +148,7 @@ $fibonacci = call_user_func(function () {
 });
 
 sprint((new Stream(0, $fibonacci))->take(5)); // [0, 1, 1, 2, 3]
-{% endhighlight %}
+```
 
 To implement the Fibonacci sequence stream using this approach we are required to use a self-invoked function to wrap the previous value state required.
 Along with this we also need to provide a reference to the returned function itself, so as to invoke it again as the tail promise.
@@ -159,7 +159,7 @@ These details, coupled with the requirement to return a new Stream instance in t
 Fortunately, as of PHP 5.5 we are able to take advantage of Generators and create a more succinct implementation which easily describes its purpose.
 Generators allow us to implement the Stream without the need to handle the deferred tail execution and implement the class-based Iterator interface.
 
-{% highlight php startinline %}
+```php
 function stream($x, callable $f)
 {
     while (true) {
@@ -196,14 +196,14 @@ function srange($start = 1, $end = INF)
 {
     return take($end - $start + 1, stream($start, function ($x) { return $x + 1; }));
 }
-{% endhighlight %}
+```
 
 As you can see we have been able to instead flatten the class-based approach into top-level functions.
 Each function is aided by type-hints, describing what it is tasked to do far more clearly.
 Using the generators 'valid' method we are able to implement all but the 'take' method using imperative while loops.
 This implementation is able to compute the previous examples, as shown below.
 
-{% highlight php startinline %}
+```php
 $isEven = function ($x) { return $x % 2 == 0; };
 
 sprint(take(10, filter($isEven, srange()))); // [2, 4, 6, 8, 10]
@@ -219,7 +219,7 @@ $fibonacci = call_user_func(function () {
 });
 
 sprint(take(10, stream(0, $fibonacci))); // [0, 1, 1, 2, 3]
-{% endhighlight %}
+```
 
 As you can see by looking at the above examples, the Fibonacci sequence code has been simplified greatly.
 We have been able to remove the need to return a new Stream instance each time, and instead able to focus solely on the generation of the next value.

@@ -11,7 +11,7 @@ However, it should be noted that this is nothing more than syntactic sugar over 
 In fact it is very easy to build our own Class implementation, using specially constructed 'class' functions as templates for the 'new' instances we wish to use.
 Below is an example implementation highlighting how to simply create a classical inheritance hierarchy within JavaScript.
 
-{% highlight js %}
+```js
 var Class = function(parent, properties) {
   if (properties === undefined) {
     properties = parent;
@@ -29,7 +29,7 @@ var Class = function(parent, properties) {
   
   return C;
 }
-{% endhighlight %}
+```
 
 Looking at the example above you will notice that we take into consideration the possibility of either a new class being defined (one parameter) or an inherited class being supplied.
 The new 'class functions' prototype is composed of its parents, along with any new properties supplied.
@@ -39,7 +39,7 @@ We also include a simple `super` function which allows the user to call its pare
 We are now able to use this implementation in a contrived representation of both a User and Admin class.
 You will notice how we call the parent classes (User) `init` and `getName` implementation within the Admin class.
 
-{% highlight js %}
+```js
 var User = Class({
   init: function(name) {
     this.name = name;
@@ -58,11 +58,11 @@ var Admin = Class(User, {
     return this.super('getName')() + ' (' + this.level + ')';
   }
 });
-{% endhighlight %}
+```
 
 We are then able to create a couple of 'class instances' and type-check them accordingly.
 
-{% highlight js %}
+```js
 var foo = new User('Foo'),
     bar = new Admin('Bar', 5),
     baz = new Admin('Baz', 10);
@@ -74,4 +74,4 @@ baz.getName(); // Baz (10)
 foo instanceof User; // true
 bar instanceof Admin; // true
 baz instanceof Class; // true
-{% endhighlight %}
+```

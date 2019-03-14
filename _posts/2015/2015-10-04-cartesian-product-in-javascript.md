@@ -10,7 +10,7 @@ The Cartesian product (cross-product) is essentially an operation which returns 
 When applied to more than a pair of sets it can be typically described as the n-fold Cartesian product.
 Below is a simple JavaScript implementation which codifies this operation in an immutable, functional manner.
 
-{% highlight js %}
+```js
 const flatten = (arr) => [].concat.apply([], arr);
 
 const product = (...sets) =>
@@ -23,4 +23,4 @@ product(
   ['red', 'green', 'blue'], 
   ['shirt', 'jeans', 'shoes']);
   // [["small", "red", "shirt"], ["small", "red", "jeans"] ...
-{% endhighlight %}
+```

@@ -9,13 +9,13 @@ This subject fascinated me, how we were able to represent non-negative natural n
 <!--more-->
 Peano numbers allow us to represent all natural numbers using a defined zero value and a successor function.
 
-{% highlight js %}
+```js
 const zero = () => false;
 const isZero = (a) => a == zero();
 
 const succ = (a) => () => a;
 const pred = (a) => a();
-{% endhighlight %}
+```
 
 Following these rules we have created the concept of zero (represented as false within our host language), along with the successor function which wraps and returns this value in a new lambda upon each invocation.
 We have also supplied accompanying zero comparator and predecessor functions which will assist us in upcoming examples.
@@ -24,12 +24,12 @@ We have also supplied accompanying zero comparator and predecessor functions whi
 
 Using this representation as a basis we are able to expand on the example by describing the four common-place arithmetic operations.
 
-{% highlight js %}
+```js
 const add = (a, b) => isZero(a) ? b : add(pred(a), succ(b));
 const sub = (a, b) => isZero(a) || isZero(b) ? a : sub(pred(a), pred(b));
 const mul = (a, b) => isZero(a) ? zero() : add(mul(pred(a), b), b);
 const div = (a, b) => isZero(a) ? zero() : succ(div(sub(a, b), b));
-{% endhighlight %}
+```
 
 Looking at the definitions above you can see how we have been able to represent these operations using recursion and the functions defined before hand.
 
@@ -37,17 +37,17 @@ Looking at the definitions above you can see how we have been able to represent 
 
 We are also able to as easily represent logical operations which return the host languages boolean value type.
 
-{% highlight js %}
+```js
 const equal = (a, b) => isZero(a) ? isZero(b) : isZero(b) ? false : equal(pred(a), pred(b));
 const less = (a, b) => isZero(a) ? !isZero(b) : isZero(b) ? false : less(pred(a), pred(b));
 const greater = (a, b) => ! (equal(a, b) || less(a, b));
-{% endhighlight %}
+```
 
 ## Example
 
 Finally, we are able to combine all these operations into succinct examples.
 
-{% highlight js %}
+```js
 const toNumber = (a) => isZero(a) ? 0 : 1 + toNumber(pred(a));
 const _0 = zero(),
       _1 = succ(_0),
@@ -62,4 +62,4 @@ toNumber(div(add(_2, _2), _2)); // 2
 equal(add(_1, _1), div(_4, _2)); // true
 less(div(_4, _2), _4); // true
 greater(mul(_4, _2), _5); // true
-{% endhighlight %}
+```

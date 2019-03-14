@@ -20,7 +20,7 @@ After describing these steps we will then work through codifying a user-land fun
 
 Now that we know the basic steps that occur when the `new` keyword is called, we can create a user-land function that mimic this behavior.
 
-{% highlight js %}
+```js
 let isObj = (o) => typeof o == 'object' || typeof o == 'function';
 
 function new_(cons, ...args) {
@@ -28,4 +28,4 @@ function new_(cons, ...args) {
   let ret = cons.apply(obj, args); // step 3
   return isObj(ret) ? ret : obj; // step 4
 };
-{% endhighlight %}
+```

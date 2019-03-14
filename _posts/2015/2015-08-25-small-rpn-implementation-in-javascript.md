@@ -10,7 +10,7 @@ Evaluation of these expressions highlights the perfect use case for a stack base
 Looping over each of the supplied tokens we push to the stack either the item if it is a number or the evaluation of the last two numbers if it is an operator.
 Once this iteration has been complete we end up with a single element in the stack which is the answer to the supplied expression.
 
-{% highlight js %}
+```js
 let rpn = (ts, s = []) => {
   ts.split(' ').forEach(t =>
     s.push(t == +t ? t : eval(s.splice(-2,1)[0] + t + s.pop())));
@@ -18,4 +18,4 @@ let rpn = (ts, s = []) => {
 }
 
 rpn('26 4 + 2 *'); // 60
-{% endhighlight %}
+```

@@ -55,7 +55,7 @@ format("Joe", ALL_OPTS); // ~*~ EOJ. ~*~
 Above are a few examples of the method being used in multiple ways.
 The third example shows the ability of composing values from multiple flags (binary representation 1100).
 
-## EmunSets
+## EnumSets
 
 Traditional use of bit flags has been around for many years and are a very performant storage mechanism (especially in graphic rendering).
 However, it can be very easy for the resulting code to be hard to understand.
